@@ -10,13 +10,24 @@ let db = new sqlite3.Database(path.join(__dirname, 'database.sqlite'), (err) => 
     }
 });
 
+let db_version = 0;
+
+const version_path = path.join(__dirname, 'db-version.txt');
+if (fs.existsSync(version_path)) {
+    db_version = parseInt(fs.readFileSync(version_path).toString());
+}
+
 fs.readdir(path.join(__dirname, 'db_inits'), (err, files) => {
     if (err) {
-        console.log(err.message);
+        console.error(err.message);
         return;
     }
 
-    files = files.filter(name => name.match(/^[0-9]+\.sql$/)).sort((a, b) => parseInt(a.match(/^[0-9]+/)[0]) - parseInt(b.match(/^[0-9]+/)[0]));
+    files = files.filter(name => name.match(/^[0-9]+\.sql$/));
+    files = files.filter(name => parseInt(name.match(/^[0-9]+/)[0]) > db_version);
+    if (files.length === 0) return;
+    files = files.sort((a, b) => parseInt(a.match(/^[0-9]+/)[0]) - parseInt(b.match(/^[0-9]+/)[0]));
+    db_version = parseInt(files[files.length-1].match(/^[0-9]+/)[0]);
     console.log(files);
     let cnt = files.length;
     for (let i = 0; i < files.length; i++) {
@@ -41,6 +52,11 @@ fs.readdir(path.join(__dirname, 'db_inits'), (err, files) => {
                             cnt--;
                             if (cnt === 0) {
                                 console.log('Serialized database.');
+                                fs.writeFile(version_path, db_version.toString(), err => {
+                                    if (err) {
+                                        console.error(err.message);
+                                    }
+                                })
                             }
                         })
                     }
