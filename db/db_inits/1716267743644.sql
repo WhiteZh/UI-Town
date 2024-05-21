@@ -1,0 +1,2 @@
+ALTER TABLE css
+    ADD COLUMN html TEXT
