@@ -69,4 +69,4 @@ fs.readdir(path.join(__dirname, 'db_inits'), (err, files) => {
     }
 });
 
-module.exports = {};
+module.exports = db;
