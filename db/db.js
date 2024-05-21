@@ -59,9 +59,9 @@ fs.readdir(path.join(__dirname, 'db_inits'), (err, files) => {
                                     if (err) {
                                         console.error(err.message);
                                     }
-                                })
+                                });
                             }
-                        })
+                        });
                     }
                 });
             }
