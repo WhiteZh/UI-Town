@@ -25,7 +25,10 @@ fs.readdir(path.join(__dirname, 'db_inits'), (err, files) => {
 
     files = files.filter(name => name.match(/^[0-9]+\.sql$/));
     files = files.filter(name => parseInt(name.match(/^[0-9]+/)[0]) > db_version);
-    if (files.length === 0) return;
+    if (files.length === 0) {
+        console.log("No initialization process is required to be performed.");
+        return;
+    }
     files = files.sort((a, b) => parseInt(a.match(/^[0-9]+/)[0]) - parseInt(b.match(/^[0-9]+/)[0]));
     db_version = parseInt(files[files.length-1].match(/^[0-9]+/)[0]);
     console.log(files);
@@ -51,7 +54,7 @@ fs.readdir(path.join(__dirname, 'db_inits'), (err, files) => {
 
                             cnt--;
                             if (cnt === 0) {
-                                console.log('Serialized database.');
+                                console.log('Initialized database.');
                                 fs.writeFile(version_path, db_version.toString(), err => {
                                     if (err) {
                                         console.error(err.message);
