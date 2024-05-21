@@ -3,3 +3,4 @@ db/database.sqlite
 .idea
 .vscode
 db/db_inits/tmp.sql
+/db/db-version.txt
