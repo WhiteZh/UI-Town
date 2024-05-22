@@ -11,7 +11,9 @@ router.get('/', (req, res) => {
         res.status(400).json({ error: "provide at least 1 id" });
         return;
     }
-    const ids = Array.isArray(req.query.id) ? req.query.id.map(parseInt) : [parseInt(req.query.id)];
+    console.log(req.query.id)
+    const ids = Array.isArray(req.query.id) ? req.query.id.map(x => parseInt(x)) : [parseInt(req.query.id)];
+    console.log(ids);
     for (let each of ids) {
         if (isNaN(each)) {
             res.status(400).json({ error: "ids should be numbers" });
