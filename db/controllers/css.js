@@ -10,6 +10,16 @@ function getCSSs(ids, callback) {
     db.all(`SELECT * FROM css WHERE id IN (${ids.map(() => '?').join(',')})`, ids, callback);
 }
 
+const categories = [
+    'button',
+    'checkbox',
+    'toggle switch',
+    'card',
+    'loader',
+    'input',
+    'transition',
+    'special effect'
+];
 /**
  * @param {number} userID
  * @param {string} password_hashed
@@ -31,7 +41,12 @@ function createCSS(userID, password_hashed, name, html, css, category, callback)
             return;
         }
 
-        db.run(`INSERT INTO css (name, author_id, html, css) VALUES (?, ?, ?, ?)`, [name, userID, html, css],
+        if (categories.indexOf(category) === -1) {
+            callback(Error('Category does not exist'), -1);
+            return;
+        }
+
+        db.run(`INSERT INTO css (name, author_id, html, css, category) VALUES (?, ?, ?, ?, ?)`, [name, userID, html, css, category],
             function(err) {
             callback(err, this.lastID);
         });

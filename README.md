@@ -25,4 +25,13 @@ password_hashed is the hashed password (sha256) of the user.
 name is the name of this CSS.  
 html is the html portion of this CSS.  
 css is the css portion of this CSS.  
-category is the category of this CSS.  
+category is the category of this CSS. Accepted categories includes:
+- button
+- checkbox
+- toggle switch
+- card
+- loader
+- input
+- transition
+- special effect
+  
