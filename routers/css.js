@@ -4,9 +4,13 @@ const router = express.Router();
 const cssController = require('../db/controllers/css');
 
 /**
- * @param {string | string[]} req.query.id
+ * @param {string | string[] | undefined} req.query.id
  */
 router.get('/', (req, res) => {
+    if (req.query.id === undefined) {
+        res.status(400).json({ error: "provide at least 1 id" });
+        return;
+    }
     const ids = Array.isArray(req.query.id) ? req.query.id.map(parseInt) : [parseInt(req.query.id)];
     for (let each of ids) {
         if (isNaN(each)) {
