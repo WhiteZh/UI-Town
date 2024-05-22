@@ -8,6 +8,10 @@ const db = require('../db');
  * @returns {void}
  */
 function createUser(name, email, password_hashed, callback) {
+    if (!email.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)) {
+        callback(Error('Wrong email format'), -1);
+        return;
+    }
     db.run(`INSERT INTO users (name, email, password_hashed) VALUES (?, ?, ?)`,
         [name, email, password_hashed],
         function(err) {
