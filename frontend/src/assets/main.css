@@ -1,0 +1,29 @@
+body {
+    margin: 0;
+}
+
+#app {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, black, #737373);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.no-link-style {
+    text-decoration: none;
+}
+
+@font-face {
+    font-family: 'Zhi Mang Xing';
+    src: url("@/assets/ZhiMangXing-Regular.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Cooljazz';
+    src: url("@/assets/Cooljazz.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
