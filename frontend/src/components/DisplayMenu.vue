@@ -10,7 +10,7 @@ import {onMounted, ref} from "vue";
   let list = ref([]);
 
   onMounted(() => {
-    fetch(`http://localhost:3000/api/css?${Array(12).fill(null).map((e, i) => `id=${i}`).join('&')}`, {
+    fetch(`/api/css?${Array(12).fill(null).map((e, i) => `id=${i}`).join('&')}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
