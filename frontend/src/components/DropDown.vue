@@ -2,8 +2,9 @@
   import {RouterLink} from "vue-router";
 
   defineProps({
-      list: Array,
+    list: Array,
   });
+
 </script>
 
 <template>
@@ -13,8 +14,8 @@
     </div>
     <div class="drop-down-menu" v-if="list">
       <ul>
-        <li v-for="{name, url} in list">
-          <RouterLink class="no-link-style" :to="url" :key="name">{{name}}</RouterLink>
+        <li v-for="{name, url, colors} in list" :key="name">
+          <RouterLink class="no-link-style" :to="url" :style="{ background: `linear-gradient(90deg, ${colors.join(',')})` }">{{name}}</RouterLink>
         </li>
       </ul>
     </div>
@@ -59,22 +60,27 @@
   background-color: #272030;
   border-radius: 1.1rem;
   margin: 0;
-  padding: 0.1rem 0.5rem 0.1rem 2.5rem;
+  padding: 0.1rem 0.5rem;
 }
 
 .drop-down-menu li {
   margin: 0.8rem 0;
+  padding: 0;
   color: white;
-  text-indent: 0.5rem;
+  list-style: none;
 }
 
 .drop-down-menu li:hover {
   text-decoration-line: underline;
 }
 
-.drop-down-menu li * {
+.drop-down-menu li>* {
   color: white;
   font-size: 0.8rem;
+  text-align: center;
+  display: block;
+  padding: 0.5rem 1rem;
+  border-radius: 2rem;
 }
 
 </style>

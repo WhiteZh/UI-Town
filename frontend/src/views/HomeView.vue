@@ -5,18 +5,18 @@
   import DisplayMenu from "@/components/DisplayMenu.vue";
 
   let CSS_attribute = ref([
-    {name: 'Buttons', url: '/'},
-    {name: 'Checkboxes', url: '/'},
-    {name: 'Toggle Switches', url: '/'},
-    {name: 'Loads', url: '/'},
-    {name: 'Transitions', url:'/'},
-    {name: 'Special Effects', url: '/'}
+    {name: 'Buttons', url: '/', colors: ['#8c52ff', '#ff914d']},
+    {name: 'Checkboxes', url: '/', colors: ['#ff5757', '#8c52ff']},
+    {name: 'Toggle Switches', url: '/', colors: ['#8c52ff', '#5ce1e6']},
+    {name: 'Loads', url: '/', colors: ['#8c52ff', '#00bf63']},
+    {name: 'Transitions', url:'/', colors: ['#004add', '#cb6ce6']},
+    {name: 'Special Effects', url: '/', colors: ['#0097b2', '#7ed957']}
   ]);
   let JS_attribute = ref([
-    {name: 'Mouse Effect', url: '/'},
-    {name: 'Background', url: '/'},
-    {name: 'Menu', url: '/'},
-    {name: 'Visible Chart', url: '/'}
+    {name: 'Mouse Effect', url: '/', colors: ['#8c52ff', '#ff914d']},
+    {name: 'Background', url: '/', colors: ['#ff5757', '#8c52ff']},
+    {name: 'Menu', url: '/', colors: ['#8c52ff', '#5ce1e6']},
+    {name: 'Visible Chart', url: '/', colors: ['#8c52ff', '#00bf63']},
   ]);
 </script>
 
