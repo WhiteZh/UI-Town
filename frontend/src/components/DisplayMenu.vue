@@ -2,12 +2,18 @@
 import {onMounted, ref} from "vue";
   import DisplayCard from "@/components/DisplayCard.vue";
 
-  defineProps({
-    category: String,
-    contentType: String,
+  const props = defineProps({
+    contentType: {
+      type: String,
+      required: true,
+    },
+    category: {
+      type: String,
+      required: true,
+    }
   });
 
-  let list = ref([]);
+  const list = ref([]);
 
   onMounted(() => {
     fetch(`/api/css?${Array(12).fill(null).map((e, i) => `id=${i}`).join('&')}`, {
@@ -41,7 +47,7 @@ import {onMounted, ref} from "vue";
       <span class="sort"><span style="font-size: 0.5rem">Sort : </span>Randomized</span>
     </div>
     <div class="main">
-      <DisplayCard v-for="{name} in list" :name="name"/>
+      <DisplayCard v-for="each in list" :name="each.name" :subscribed="0" :css="each.css" :html="each.html"/>
     </div>
     <div class="footer">
 

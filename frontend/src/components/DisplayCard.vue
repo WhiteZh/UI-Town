@@ -4,19 +4,19 @@ import {ref} from "vue";
 const props = defineProps({
   name: {
     type: String,
-    default: "",
+    required: true,
   },
-  subscribe: {
+  subscribed: {
     type: Number,
-    default: 0,
+    required: true,
   },
   html: {
     type: String,
-    default: "",
+    required: true,
   },
   css: {
     type: String,
-    default: "",
+    required: true,
   },
 });
 
@@ -59,7 +59,7 @@ const htmlContent = ref(`
         {{name}}
       </div>
       <div class="card-subs">
-        subs: {{subscribe}}
+        subs: {{ subscribed }}
       </div>
     </div>
   </div>

@@ -49,7 +49,7 @@ import {onMounted, ref} from "vue";
         <DropDown :list="CSS_attribute">CSS</DropDown>
         <DropDown :list="JS_attribute">JavaScript</DropDown>
       </div>
-      <DisplayMenu/>
+      <DisplayMenu content-type="" category=""/>
   </div>
 
   </div>
