@@ -1,5 +1,5 @@
 <script setup>
-  import {ref} from "vue";
+import {onMounted, ref} from "vue";
   import NavigationBar from "@/components/NavigationBar.vue";
   import DropDown from "@/components/DropDown.vue";
   import DisplayMenu from "@/components/DisplayMenu.vue";
@@ -18,26 +18,66 @@
     {name: 'Menu', url: '/', colors: ['#8c52ff', '#5ce1e6']},
     {name: 'Visible Chart', url: '/', colors: ['#8c52ff', '#00bf63']},
   ]);
+
+  let openingVisible = ref(false);
+  let bodyVisible = ref(false);
+  let openingExist = ref(true);
+
+  onMounted(() => {
+    setTimeout(() => openingVisible.value = true, 1);
+    setTimeout(() => { openingVisible.value = false; bodyVisible.value = true }, 1200);
+    setTimeout(() => openingExist.value = false, 2400);
+  });
 </script>
 
 <template>
-  <NavigationBar/>
-  <div class="header">
-    <h3>To Select</h3>
-    <h6>Choose the code of your choice</h6>
+  <div :style="{ opacity: openingVisible ? '1' : '0', display: openingExist ? 'block' : 'none' }" class="openingElement" style="top: 25vh; font-size: 30vh;">
+    New design
   </div>
-  <div class="main">
-    <div class="left-nav">
+  <div :style="{ opacity: openingVisible ? '1' : '0', display: openingExist ? 'block' : 'none' }" class="openingElement" style="bottom: 25vh; transition-delay: 0.1s; transition-duration: 0.5s; font-size: 8vh;">
+    From UI Town
+  </div>
+  <div :style="{ opacity: bodyVisible ? '1' : '0' }" class="body">
+    <NavigationBar/>
+    <div class="header">
+      <h3>To Select</h3>
+      <h6>Choose the code of your choice</h6>
+    </div>
+    <div class="main">
+      <div class="left-nav">
         <DropDown>All</DropDown>
         <DropDown :list="CSS_attribute">CSS</DropDown>
         <DropDown :list="JS_attribute">JavaScript</DropDown>
-    </div>
-    <DisplayMenu/>
+      </div>
+      <DisplayMenu/>
+  </div>
+
   </div>
 
 </template>
 
 <style scoped>
+.body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  transition-property: opacity;
+  transition-duration: 0.4s;
+  transition-delay: 0.6s;
+  transition-timing-function: linear;
+}
+
+.openingElement {
+  position: absolute;
+  text-align: center;
+  transition-property: opacity;
+  transition-duration: 0.6s;
+  transition-timing-function: linear;
+  color: white;
+  width: 100%;
+  font-family: Amsterdam, serif;
+}
+
 .main {
   display: flex;
   flex-direction: row;
