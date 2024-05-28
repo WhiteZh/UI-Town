@@ -55,4 +55,21 @@ router.post('/', (req, res) => {
     });
 });
 
+router.get('/valid', (req, res) => {
+    let options = {
+        category: req.query.category,
+        limit: req.query.limit,
+        offset: req.query.offset
+    };
+
+    cssController.getValidIDs(options, (err, ids) => {
+        if (err) {
+            res.status(400).json({ error: err.message });
+            return;
+        }
+
+        res.json(ids.map(o => o.id));
+    });
+})
+
 module.exports = router;

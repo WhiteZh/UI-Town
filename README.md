@@ -35,3 +35,10 @@ category is the category of this CSS. Accepted categories includes:
 - transition
 - special effect
   
+### Fetching IDs Of Existing CSS
+```http request
+GET /api/css/valid?category=_&limit=_&offset=_
+```
+
+Return an array of numbers which are the ids of existing css.  
+Query params used for filtering purpose, all of them can be ignored.  

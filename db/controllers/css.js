@@ -10,6 +10,30 @@ function getCSSs(ids, callback) {
     db.all(`SELECT * FROM css WHERE id IN (${ids.map(() => '?').join(',')})`, ids, callback);
 }
 
+/**
+ * @param {Object} options
+ * @param {string | undefined} options.category
+ * @param {number | undefined} options.limit
+ * @param {number | undefined} options.offset
+ * @param {function(Error | null, Object[]): void} callback
+ */
+function getValidIDs(options, callback) {
+    let [where, limit, params] = ['', '', []];
+    if (options.category) {
+        where = `WHERE category=? `;
+        params.push(options.category);
+    }
+    if (options.limit) {
+        limit = `LIMIT ? `;
+        params.push(options.limit);
+        if (options.offset) {
+            limit += `OFFSET ? `;
+            params.push(options.offset);
+        }
+    }
+    db.all(`SELECT id FROM css ${where} ${limit}`, params, callback);
+}
+
 const categories = [
     'button',
     'checkbox',
@@ -55,5 +79,6 @@ function createCSS(userID, password_hashed, name, html, css, category, callback)
 
 module.exports = {
     getCSSs,
+    getValidIDs,
     createCSS,
 }
