@@ -1,0 +1,1 @@
+ALTER TABLE css DROP COLUMN content_type
