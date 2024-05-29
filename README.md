@@ -2,7 +2,7 @@
 ## CSS
 ### Fetching CSS By IDs
 ```http request
-GET /api/css?id=1&id=2&id=3...&id=n
+GET /api/css?id=_&id=_&id=_...
 ```
 Due to the length limitation of URL, do not retrieve more than 200 object at once.  
 The response will be in the form of a json array of objects containing every information regarding the requested CSS objects.  
@@ -42,3 +42,11 @@ GET /api/css/valid?category=_&limit=_&offset=_
 
 Return an array of numbers which are the ids of existing css.  
 Query params used for filtering purpose, all of them can be ignored.  
+
+### Validate User Password
+```http request
+GET /api/users/isvalid?id=_&email=_&password_hashed=_
+```
+
+Return whether the hashed (sha256) password provided is true/false.  
+Only one of the identification query params (id/email) is required.  
