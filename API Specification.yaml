@@ -1,0 +1,211 @@
+openapi: 3.0.3
+info:
+  title: UI-Town
+  version: 1.0.0
+components:
+  schemas:
+    CSSObject:
+      type: object
+      description: each object represent a CSS
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        viewed_time:
+          type: integer
+        author_id:
+          type: integer
+        html:
+          type: string
+        css:
+          type: string
+        category:
+          type: string
+    CSSCategory:
+      type: string
+      description: the category of a CSS
+      enum:
+        - button
+        - checkbox
+        - toggle switch
+        - card
+        - loader
+        - input
+        - transition
+        - special effect
+    CSSOrder:
+      type: string
+      description: things that ordering CSS can be based on
+      enum:
+        - id
+        - name
+        - viewed_time
+  responses:
+    '400':
+      description: Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                description: description of what went wrong
+paths:
+  /api/css:
+    get:
+      summary: Fetching CSS By IDs
+      description: |
+        Due to the length limitation of URL, do not retrieve more than 200 object at once.  
+        The response will be in the form of a json array of objects containing every information regarding the requested CSS objects.
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            oneOf:
+              - type: integer
+              - type: array
+                items:
+                  type: integer
+          description: id(s) of the CSS
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CSSObject'
+        '400':
+          $ref: '#/components/responses/400'
+    post:
+      summary: Upload CSS
+      description: create a new CSS
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userID:
+                  type: number
+                  description: id of the creator of this CSS
+                password_hashed:
+                  type: string
+                  description: hashed password (sha256) of the user
+                name:
+                  type: string
+                  description: name of this CSS
+                html:
+                  type: string
+                  description: the HTML portion
+                css:
+                  type: string
+                  description: the CSS portion
+                category:
+                  $ref: '#/components/schemas/CSSCategory'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: integer
+                description: the ID of the CSS just created
+        '400':
+          $ref: '#/components/responses/400'
+  /api/css/valid:
+    get:
+      summary: Fetching IDs Of Existing CSS
+      description:
+        get the IDs of the existing CSS in the database
+      parameters:
+        - name: category
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/CSSCategory'
+          description: select only the IDs of CSSs that belongs to category `category`
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+          description: select `limit` number of IDs at once
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+          description: |
+            jump `offset` number of IDs before parameter `limit` takes place  
+            will be ignored unless `limit` is provided
+        - name: order
+          in: query
+          required: false
+          schema:
+            oneOf:
+              - $ref: '#/components/schemas/CSSOrder'
+              - type: array
+                items:
+                  $ref: '#/components/schemas/CSSOrder'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+                  description: IDs
+        '400':
+          $ref: '#/components/responses/400'
+  /api/users/isvalid:
+    get:
+      summary: Validate User Password
+      description: |
+        get whether the hashed (sha256) password provided is true/false  
+        only one of the identification query params (`id`/`email`) is required
+      parameters:
+        - name: id
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+          required: true
+          description: only one of `id` and `email` is required
+        - name: email
+          in: query
+          schema:
+            type: string
+          required: true
+          description: only one of `id` and `email` is required
+        - name: password_hashed
+          in: query
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: boolean
+                description: true if the (hashed) password is correct, false otherwise
+        '400':
+          $ref: '#/components/responses/400'
+
+
+
+
+
+
+
