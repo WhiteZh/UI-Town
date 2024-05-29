@@ -1,0 +1,6 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="dev" type="CompoundRunConfigurationType">
+    <toRun name="app.js (dev)" type="NodeJSConfigurationType" />
+    <method v="2" />
+  </configuration>
+</component>
