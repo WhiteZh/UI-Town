@@ -29,6 +29,15 @@ function getUserByID(id, callback) {
 }
 
 /**
+ * @param {string} email
+ * @param {function(Error | null, Object): void} callback
+ * @returns {void}
+ */
+function getUserByEmail(email, callback) {
+    db.get(`SELECT * FROM users WHERE email = ?`, [email], callback);
+}
+
+/**
  * @param {number} id
  * @param {Object} properties
  * @param {function(Error | null): void} callback
@@ -42,5 +51,6 @@ function updateUser(id, properties, callback) {
 module.exports = {
     createUser,
     getUserByID,
+    getUserByEmail,
     updateUser,
 };
