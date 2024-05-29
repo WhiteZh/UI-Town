@@ -5,6 +5,7 @@ const userController = require('./user');
 /**
  * @param {number[]} ids
  * @param {function(Error | null, Object[]): void} callback
+ * @returns {void}
  */
 function getCSSs(ids, callback) {
     db.all(`SELECT * FROM css WHERE id IN (${ids.map(() => '?').join(',')})`, ids, callback);
@@ -16,6 +17,7 @@ function getCSSs(ids, callback) {
  * @param {number | undefined} options.limit
  * @param {number | undefined} options.offset
  * @param {function(Error | null, Object[]): void} callback
+ * @returns {void}
  */
 function getValidIDs(options, callback) {
     let [where, limit, params] = ['', '', []];
@@ -52,6 +54,7 @@ const categories = [
  * @param {string} css
  * @param {string} category
  * @param {function(Error | null, number): void} callback
+ * @returns {void}
  */
 function createCSS(userID, password_hashed, name, html, css, category, callback) {
     userController.getUserByID(userID, (err, user) => {
