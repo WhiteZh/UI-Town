@@ -51,7 +51,7 @@ router.post('/', (req, res) => {
             return;
         }
 
-        res.json({ id });
+        res.json(id);
     });
 });
 
