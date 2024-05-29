@@ -58,8 +58,9 @@ router.post('/', (req, res) => {
 router.get('/valid', (req, res) => {
     let options = {
         category: req.query.category,
-        limit: req.query.limit,
-        offset: req.query.offset
+        limit: parseInt(req.query.limit),
+        offset: parseInt(req.query.offset),
+        order: Array.isArray(req.query.order) ? req.query.order : [req.query.order],
     };
 
     cssController.getValidIDs(options, (err, ids) => {

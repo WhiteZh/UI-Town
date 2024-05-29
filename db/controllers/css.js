@@ -16,14 +16,27 @@ function getCSSs(ids, callback) {
  * @param {string | undefined} options.category
  * @param {number | undefined} options.limit
  * @param {number | undefined} options.offset
+ * @param {string[]} options.order
  * @param {function(Error | null, Object[]): void} callback
  * @returns {void}
  */
 function getValidIDs(options, callback) {
-    let [where, limit, params] = ['', '', []];
+    let where = '';
+    let order = '';
+    let limit = '';
+    let params = [];
     if (options.category) {
         where = `WHERE category=? `;
         params.push(options.category);
+    }
+    if (options.order) {
+        for (let each of options.order) {
+            if (!each.match(/^[a-zA-Z_]+$/)) {
+                callback(Error('Illegal column name contained inside options.order'), []);
+                return;
+            }
+        }
+        order = `ORDER BY ${options.order.join(',')} `;
     }
     if (options.limit) {
         limit = `LIMIT ? `;
@@ -33,7 +46,7 @@ function getValidIDs(options, callback) {
             params.push(options.offset);
         }
     }
-    db.all(`SELECT id FROM css ${where} ${limit}`, params, callback);
+    db.all(`SELECT id FROM css ${where} ${order} ${limit}`, params, callback);
 }
 
 const categories = [
