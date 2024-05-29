@@ -37,7 +37,7 @@ category is the category of this CSS. Accepted categories includes:
   
 ### Fetching IDs Of Existing CSS
 ```http request
-GET /api/css/valid?category=_&limit=_&offset=_
+GET /api/css/valid?category=_&limit=_&offset=_&order=_&order=_&order=_...
 ```
 
 Return an array of numbers which are the ids of existing css.  
