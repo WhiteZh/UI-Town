@@ -2,6 +2,10 @@ body {
     margin: 0;
 }
 
+div {
+    box-sizing: border-box;
+}
+
 #app {
     font-family: Arial, sans-serif;
     background: linear-gradient(135deg, black, #737373);
@@ -10,6 +14,11 @@ body {
 
 .no-link-style {
     text-decoration: none;
+}
+
+.input {
+    border: none;
+    outline: none;
 }
 
 @font-face {
