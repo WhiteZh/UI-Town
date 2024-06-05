@@ -3,27 +3,33 @@ import Login from "@/components/Login.vue"
 import {ref} from "vue";
 
 let open_login = ref(false)
-let open_log = () => { open_login.value = !open_login.value };
 
 </script>
 
 <template>
-  <Login v-if="open_login"/>
+  <div class="outer-login" v-if="open_login" @click="open_login = !open_login"></div>
+  <Login v-if="open_login" style="z-index: 1"/>
   <div class="navbar" id="navbar">
     <a class="home-title no-link-style" href="/">UITOWN</a>
     <a href="#" class="no-link-style navbar-element">Information</a>
     <a href="#" class="no-link-style navbar-element">Recommendation</a>
     <span style="flex-grow: 1"></span>
-    <a href="#" class="no-link-style navbar-option" style="background-color: #1ac8db" @click="open_log">Join in the Town</a>
+    <a href="#" class="no-link-style navbar-option" style="background-color: #1ac8db" @click="open_login = !open_login">Join in the Town</a>
     <a href="#" class="no-link-style navbar-option" style="background-color: #99dfec">Create</a>
   </div>
 
 </template>
 
 <style scoped>
-login {
+.outer-login {
+  z-index: 1;
   position: absolute;
+  height: 100vh;
+  width: 100vw;
+  opacity: 0.3;
+  background-color: black;
 }
+
 .navbar {
   padding: 1rem 1rem 0 1rem;
   display: flex;
