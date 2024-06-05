@@ -1,9 +1,8 @@
 <script setup>
-import {onMounted, ref} from "vue";
+  import {onMounted, ref} from "vue";
   import NavigationBar from "@/components/NavigationBar.vue";
   import DropDown from "@/components/DropDown.vue";
   import DisplayMenu from "@/components/DisplayMenu.vue";
-
   let CSS_attribute = ref([
     {name: 'Buttons', url: '/', colors: ['#8c52ff', '#ff914d']},
     {name: 'Checkboxes', url: '/', colors: ['#ff5757', '#8c52ff']},
@@ -102,7 +101,7 @@ import {onMounted, ref} from "vue";
   font-style: italic;
   text-indent: 2rem;
   margin: 1rem 0;
-  font-size: 0.5rem;
+  font-size: 0.7rem;
 }
 
 .left-nav {
