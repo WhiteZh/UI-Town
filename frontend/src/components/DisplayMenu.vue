@@ -75,7 +75,7 @@ import {onMounted, ref} from "vue";
 
 .sort {
   white-space: pre;
-  font-size: 0.6rem;
+  font-size: 0.8rem;
   font-family: "Cooljazz", serif;
   font-style: italic;
   align-self: flex-end;
