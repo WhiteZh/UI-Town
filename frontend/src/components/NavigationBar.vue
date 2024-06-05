@@ -2,19 +2,19 @@
 import Login from "@/components/Login.vue"
 import {ref} from "vue";
 
-let open_login = ref(false)
+let openLogin = ref(false)
 
 </script>
 
 <template>
-  <div class="outer-login" v-if="open_login" @click="open_login = !open_login"></div>
-  <Login v-if="open_login" style="z-index: 1"/>
+  <div class="outer-login" v-if="openLogin" @click="openLogin = !openLogin"></div>
+  <Login v-if="openLogin" style="z-index: 1"/>
   <div class="navbar" id="navbar">
     <a class="home-title no-link-style" href="/">UITOWN</a>
     <a href="#" class="no-link-style navbar-element">Information</a>
     <a href="#" class="no-link-style navbar-element">Recommendation</a>
     <span style="flex-grow: 1"></span>
-    <a href="#" class="no-link-style navbar-option" style="background-color: #1ac8db" @click="open_login = !open_login">Join in the Town</a>
+    <a href="#" class="no-link-style navbar-option" style="background-color: #1ac8db" @click="openLogin = !openLogin">Join in the Town</a>
     <a href="#" class="no-link-style navbar-option" style="background-color: #99dfec">Create</a>
   </div>
 
