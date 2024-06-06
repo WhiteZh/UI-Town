@@ -10,7 +10,7 @@ let openLogin = ref(false)
   <div class="outer-login" v-if="openLogin" @click="openLogin = !openLogin"></div>
   <Login v-if="openLogin" style="z-index: 1"/>
   <div class="navbar" id="navbar">
-    <a class="home-title no-link-style" href="/">UITOWN</a>
+    <a class="home-title no-link-style" href="/"><img src="@/assets/logo.png" alt="UITOWN"/></a>
     <a href="#" class="no-link-style navbar-element">Information</a>
     <a href="#" class="no-link-style navbar-element">Recommendation</a>
     <span style="flex-grow: 1"></span>
@@ -46,6 +46,10 @@ let openLogin = ref(false)
 }
 .home-title:hover {
   color: whitesmoke;
+}
+
+.home-title>img {
+  height: 3rem;
 }
 
 .navbar-element {
