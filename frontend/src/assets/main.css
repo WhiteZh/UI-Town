@@ -2,16 +2,23 @@ body {
     margin: 0;
 }
 
+* {
+    box-sizing: border-box;
+}
+
 #app {
     font-family: Arial, sans-serif;
     background: linear-gradient(135deg, black, #737373);
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
 }
 
 .no-link-style {
     text-decoration: none;
+}
+
+.input {
+    border: none;
+    outline: none;
 }
 
 @font-face {
@@ -24,6 +31,13 @@ body {
 @font-face {
     font-family: 'Cooljazz';
     src: url("@/assets/Cooljazz.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Amsterdam';
+    src: url("@/assets/Amsterdam.ttf") format("truetype");
     font-weight: normal;
     font-style: normal;
 }
