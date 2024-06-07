@@ -57,6 +57,8 @@ onMounted(() => {
     let css = cssView.state.doc.toString();
     if (html !== lastHTML || css !== lastCSS) {
       iframeValue.value = iframeContent(html, css);
+      lastHTML = html;
+      lastCSS = css;
     }
   }, 500);
 });
