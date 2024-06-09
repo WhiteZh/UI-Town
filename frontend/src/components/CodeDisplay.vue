@@ -9,12 +9,12 @@ import { onMounted, ref } from "vue";
 
 const props = defineProps({
   html: {
-    type: String,
-    default: '',
+    type: Object,
+    default: ref(''),
   },
   css: {
-    type: String,
-    default: ''
+    type: Object,
+    default: ref(''),
   },
 });
 
@@ -31,7 +31,7 @@ onMounted(() => {
   const cssExtensions = [basicSetup.filter((e, i) => i !== 12), oneDark, css()];
 
   const htmlState = EditorState.create({
-    doc: props.html,
+    doc: props.html.value,
     extensions: htmlExtensions,
   });
 
@@ -41,7 +41,7 @@ onMounted(() => {
   });
 
   const cssState = EditorState.create({
-    doc: props.css,
+    doc: props.css.value,
     extensions: cssExtensions,
   });
 
@@ -57,6 +57,8 @@ onMounted(() => {
     let css = cssView.state.doc.toString();
     if (html !== lastHTML || css !== lastCSS) {
       iframeValue.value = iframeContent(html, css);
+      props.html.value = html;
+      props.css.value = css;
       lastHTML = html;
       lastCSS = css;
     }
