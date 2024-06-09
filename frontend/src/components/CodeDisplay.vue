@@ -9,14 +9,16 @@ import { onMounted, ref } from "vue";
 
 const props = defineProps({
   html: {
-    type: Object,
-    default: ref(''),
+    type: String,
+    default: '',
   },
   css: {
-    type: Object,
-    default: ref(''),
+    type: String,
+    default: '',
   },
 });
+
+const emit = defineEmits(['update:html', 'update:css']);
 
 const activeTab = ref('html');
 
@@ -31,7 +33,7 @@ onMounted(() => {
   const cssExtensions = [basicSetup.filter((e, i) => i !== 12), oneDark, css()];
 
   const htmlState = EditorState.create({
-    doc: props.html.value,
+    doc: props.html,
     extensions: htmlExtensions,
   });
 
@@ -41,7 +43,7 @@ onMounted(() => {
   });
 
   const cssState = EditorState.create({
-    doc: props.css.value,
+    doc: props.css,
     extensions: cssExtensions,
   });
 
@@ -57,8 +59,8 @@ onMounted(() => {
     let css = cssView.state.doc.toString();
     if (html !== lastHTML || css !== lastCSS) {
       iframeValue.value = iframeContent(html, css);
-      props.html.value = html;
-      props.css.value = css;
+      emit('update:html', html);
+      emit('update:css', css);
       lastHTML = html;
       lastCSS = css;
     }

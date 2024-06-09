@@ -44,7 +44,7 @@ function submit() {
         </select>
       </div>
     </div>
-    <CodeDisplay style="height: 80vh; margin: 2.5rem auto 0 auto; max-width: 2000px;" :html="html" :css="css"/>
+    <CodeDisplay style="height: 80vh; margin: 2.5rem auto 0 auto; max-width: 2000px;" v-model:html="html" v-model:css="css"/>
   </div>
 </template>
 
