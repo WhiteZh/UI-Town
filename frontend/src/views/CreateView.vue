@@ -44,13 +44,14 @@ function submit() {
         </select>
       </div>
     </div>
-    <CodeDisplay style="height: 80vh; margin: 2.5rem auto 0 auto; max-width: 2000px;" v-model:html="html" v-model:css="css"/>
+    <div style="height: 2rem;"></div>
+    <CodeDisplay style="height: 75vh; margin: 0 auto; max-width: 2000px;" v-model:html="html" v-model:css="css"/>
   </div>
 </template>
 
 <style scoped>
 .main {
-  padding: 0 2rem;
+  padding: 2rem;
 }
 
 .float {
@@ -61,7 +62,7 @@ function submit() {
   border-radius: 2rem;
   height: 5rem;
   max-width: 2000px;
-  margin: 2rem auto;
+  margin: 0;
   align-items: center;
   justify-content: space-between;
 }
