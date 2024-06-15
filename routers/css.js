@@ -40,10 +40,10 @@ router.post('/', (req, res) => {
      * @property {string} category
      */
     const body = req.body;
-    if (typeof (body) !== 'object' || typeof (body.userID) !== 'number' || typeof (body.password_hashed) !== 'string' || typeof (body.name) !== 'string' || typeof (body.html) !== 'string' || typeof (body.css) !== 'string' || typeof (body.category) !== 'string') {
+    /*if (typeof (body) !== 'object' || typeof (body.userID) !== 'number' || typeof (body.password_hashed) !== 'string' || typeof (body.name) !== 'string' || typeof (body.html) !== 'string' || typeof (body.css) !== 'string' || typeof (body.category) !== 'string') {
         res.status(400).json({error: 'Bad request'});
         return;
-    }
+    }*/
 
     cssController.createCSS(body.userID, body.password_hashed, body.name, body.html, body.css, body.category, (err, id) => {
         if (err) {

@@ -21,6 +21,10 @@ body {
     outline: none;
 }
 
+iframe {
+    border: none;
+}
+
 @font-face {
     font-family: 'Zhi Mang Xing';
     src: url("@/assets/ZhiMangXing-Regular.ttf") format("truetype");
@@ -40,4 +44,25 @@ body {
     src: url("@/assets/Amsterdam.ttf") format("truetype");
     font-weight: normal;
     font-style: normal;
+}
+
+.cm-editor {
+    background-color: transparent !important;
+}
+
+.cm-focused {
+    outline: none !important;
+}
+
+.cm-gutters {
+    background-color: transparent !important;
+    border: none !important;
+}
+
+.cm-activeLineGutter {
+    background-color: transparent !important;
+}
+
+.cm-activeLine {
+    background-color: transparent !important;
 }

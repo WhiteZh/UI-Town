@@ -1,6 +1,7 @@
 <script setup>
 import Login from "@/components/Login.vue"
 import {ref} from "vue";
+import { RouterLink } from "vue-router";
 
 let openLogin = ref(false)
 
@@ -10,12 +11,12 @@ let openLogin = ref(false)
   <div class="outer-login" v-if="openLogin" @click="openLogin = !openLogin"></div>
   <Login v-if="openLogin" style="z-index: 1"/>
   <div class="navbar" id="navbar">
-    <a class="home-title no-link-style" href="/">UITOWN</a>
+    <RouterLink class="home-title no-link-style" to="/"><img src="@/assets/logo.png" alt="UITOWN"/></RouterLink>
     <a href="#" class="no-link-style navbar-element">Information</a>
     <a href="#" class="no-link-style navbar-element">Recommendation</a>
     <span style="flex-grow: 1"></span>
-    <a href="#" class="no-link-style navbar-option" style="background-color: #1ac8db" @click="openLogin = !openLogin">Join in the Town</a>
-    <a href="#" class="no-link-style navbar-option" style="background-color: #99dfec">Create</a>
+    <a href='#' class="no-link-style navbar-option" style="background-color: #1ac8db" @click="openLogin = !openLogin">Join in the Town</a>
+    <RouterLink to="/create" class="no-link-style navbar-option" style="background-color: #99dfec">Create</RouterLink>
   </div>
 
 </template>
@@ -46,6 +47,10 @@ let openLogin = ref(false)
 }
 .home-title:hover {
   color: whitesmoke;
+}
+
+.home-title>img {
+  height: 3rem;
 }
 
 .navbar-element {
