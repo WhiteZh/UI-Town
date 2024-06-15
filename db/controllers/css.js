@@ -75,6 +75,10 @@ function createCSS(userID, password_hashed, name, html, css, category, callback)
             callback(err, -1);
             return;
         }
+        if (!user) {
+            callback(Error("User does not exist"), -1);
+            return;
+        }
 
         if (user.password_hashed !== password_hashed) {
             callback(Error('Incorrect password'), -1);
