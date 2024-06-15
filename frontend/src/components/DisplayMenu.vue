@@ -30,7 +30,7 @@ import {onMounted, ref} from "vue";
             'Content-Type': 'application/json'
           }
         })).json();
-        styles.value = styles;
+        list.value = styles;
       }
     } catch (e) {
       console.log(e);
