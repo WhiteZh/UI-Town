@@ -60,7 +60,7 @@ router.get('/valid', (req, res) => {
         category: req.query.category,
         limit: parseInt(req.query.limit),
         offset: parseInt(req.query.offset),
-        order: Array.isArray(req.query.order) ? req.query.order : [req.query.order],
+        order: req.query.order ? (Array.isArray(req.query.order) ? req.query.order : [req.query.order]) : null,
     };
 
     cssController.getValidIDs(options, (err, ids) => {
