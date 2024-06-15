@@ -19,7 +19,12 @@ app.use('/api/css', cssRouter);
 app.use('/api/users', usersRouter);
 
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'frontend', 'dist', 'index.html'));
+    console.log('req.path: ' + req.path);
+    if (req.path.match(/^\/api/)) {
+        res.status(400);
+    } else {
+        res.sendFile(path.join(__dirname, 'frontend', 'dist', 'index.html'));
+    }
 });
 
 app.listen(port, () => console.log(`Listening on port ${port}`));

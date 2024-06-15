@@ -15,22 +15,26 @@ import {onMounted, ref} from "vue";
 
   const list = ref([]);
 
-  onMounted(() => {
-    fetch(`/api/css?${Array(12).fill(null).map((e, i) => `id=${i}`).join('&')}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
+  onMounted(async function() {
+    try {
+      let ids = await (await fetch('/api/css/valid', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })).json();
+      if (ids.length > 0) {
+        let styles = await (await fetch(`/api/css?${ids.map(e => `id=${e}`).join('&')}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })).json();
+        styles.value = styles;
       }
-    }).then(res => {
-      if (res.ok) {
-        res.json().then(val => {
-          list.value = val;
-          console.log(val);
-        });
-      } else {
-        res.json().then(err => console.error(err.message));
-      }
-    });
+    } catch (e) {
+      console.log(e);
+    }
   });
 </script>
 
