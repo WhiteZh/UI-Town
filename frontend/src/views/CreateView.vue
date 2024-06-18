@@ -62,7 +62,7 @@ function submit() {
   border-radius: 2rem;
   height: 5rem;
   max-width: 2000px;
-  margin: 0;
+  margin: 0 auto;
   align-items: center;
   justify-content: space-between;
 }
