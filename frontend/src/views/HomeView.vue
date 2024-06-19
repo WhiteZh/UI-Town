@@ -22,7 +22,6 @@
 </script>
 
 <template>
-  <Notifications/>
   <NavigationBar/>
 <!--  <OpeningAnimation/>-->
   <div class="header">
