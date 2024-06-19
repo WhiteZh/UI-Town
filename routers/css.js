@@ -6,7 +6,7 @@ const cssController = require('../db/controllers/css');
 /**
  * @param {string | string[] | undefined} req.query.id
  */
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
     if (req.query.id === undefined) {
         res.status(400).json({error: "provide at least 1 id"});
         return;
@@ -19,17 +19,15 @@ router.get('/', (req, res) => {
         }
     }
 
-    cssController.getCSSs(ids, (err, rows) => {
-        if (err) {
-            res.status(400).json({error: err.message});
-        } else {
-            res.json(rows);
-        }
-    });
+    try {
+        res.json(await cssController.getCSSs(ids));
+    } catch (e) {
+        res.status(400).json({error: e.message});
+    }
 });
 
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
     /**
      * @type {Object}
      * @property {number} userID
@@ -45,17 +43,14 @@ router.post('/', (req, res) => {
         return;
     }*/
 
-    cssController.createCSS(body.userID, body.password_hashed, body.name, body.html, body.css, body.category, (err, id) => {
-        if (err) {
-            res.status(400).json({ error: err.message });
-            return;
-        }
-
-        res.json(id);
-    });
+    try {
+        res.json(await cssController.createCSS(body.userID, body.password_hashed, body.name, body.html, body.css, body.category));
+    } catch (e) {
+        res.status(400).json({error: e.message});
+    }
 });
 
-router.get('/valid', (req, res) => {
+router.get('/valid', async (req, res) => {
     let options = {
         category: req.query.category,
         limit: parseInt(req.query.limit),
@@ -63,14 +58,11 @@ router.get('/valid', (req, res) => {
         order: req.query.order ? (Array.isArray(req.query.order) ? req.query.order : [req.query.order]) : null,
     };
 
-    cssController.getValidIDs(options, (err, ids) => {
-        if (err) {
-            res.status(400).json({ error: err.message });
-            return;
-        }
-
-        res.json(ids.map(o => o.id));
-    });
+    try {
+        res.json(await cssController.getValidIDs(options));
+    } catch (e) {
+        res.status(400).json({ error: e.message });
+    }
 })
 
 module.exports = router;
