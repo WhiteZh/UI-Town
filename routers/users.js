@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const userController = require('../db/controllers/user');
-router.get('/isvalid', (req, res) => {
+router.get('/login', (req, res) => {
     if (!req.query.password_hashed) {
         res.status(400).json({ error: "No hashed password is provided"});
         return;
@@ -14,7 +14,7 @@ router.get('/isvalid', (req, res) => {
            return;
        }
 
-       res.json(user.password_hashed === req.query.password_hashed);
+       res.json(user.password_hashed === req.query.password_hashed ? user.id : -1);
    };
 
    if (req.query.id) {
