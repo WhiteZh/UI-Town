@@ -1,10 +1,9 @@
 <script setup>
-  import {onMounted, ref, getCurrentInstance} from "vue";
+  import {onMounted, ref} from "vue";
   import NavigationBar from "@/components/NavigationBar.vue";
   import DropDown from "@/components/DropDown.vue";
   import DisplayMenu from "@/components/DisplayMenu.vue";
   import OpeningAnimation from "@/components/OpeningAnimation.vue";
-  import Notifications from "@/components/Notifications.vue";
   let CSS_attribute = ref([
     {name: 'Buttons', url: '/', colors: ['#8c52ff', '#ff914d']},
     {name: 'Checkboxes', url: '/', colors: ['#ff5757', '#8c52ff']},
