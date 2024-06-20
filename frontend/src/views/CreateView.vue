@@ -11,10 +11,14 @@ onMounted(() => {
     router.push('/');
     const notifications = inject('notifications');
     notifications.push({
-      message: 'Please login before creating new styles'
+      message: 'Please login before creating new styles',
+      color: 'yellow'
     });
   }
 })
+
+const user = inject('user');
+const notifications = inject('notifications');
 
 const name = ref(null);
 const type = ref(null);
@@ -22,21 +26,27 @@ const type = ref(null);
 const html = ref('');
 const css = ref('');
 
-function submit() {
-  fetch('/api/css', {
+async function submit() {
+  console.log(user);
+  let res = await fetch('/api/css', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      userID: 0,
-      password_hashed: Array(64).fill('0').join(''),
+      userID: user.id,
+      password_hashed: user.password_hashed,
       name: name.value.value,
       category: type.value.value,
       html: html.value,
       css: css.value,
     })
-  }).then(res => console.log(res));
+  });
+  if (res.ok) {
+    notifications.push({message: 'Successfully created a new style'});
+  } else {
+    notifications.push({message: `Upload failed: ${(await res.json()).error}`, color: 'yellow'});
+  }
 }
 </script>
 
