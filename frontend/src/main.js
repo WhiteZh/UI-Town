@@ -5,8 +5,8 @@ import App from './App.vue'
 import router from './router'
 
 const app = createApp(App)
-
-app.config.globalProperties.$notifications = reactive([]);
+app.provide('notifications', reactive([]));
+app.provide('user', reactive({}));
 
 app.use(router)
 
