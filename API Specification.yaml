@@ -167,26 +167,18 @@ paths:
                   description: IDs
         '400':
           $ref: '#/components/responses/400'
-  /api/users/isvalid:
+  /api/users/login:
     get:
       summary: Validate User Password
       description: |
         get whether the hashed (sha256) password provided is true/false  
         only one of the identification query params (`id`/`email`) is required
       parameters:
-        - name: id
-          in: query
-          schema:
-            type: integer
-            minimum: 1
-          required: true
-          description: only one of `id` and `email` is required
         - name: email
           in: query
           schema:
             type: string
           required: true
-          description: only one of `id` and `email` is required
         - name: password_hashed
           in: query
           schema:
@@ -198,8 +190,8 @@ paths:
           content:
             application/json:
               schema:
-                type: boolean
-                description: true if the (hashed) password is correct, false otherwise
+                type: integer
+                description: positive integer representing the id if the (hashed) password is correct, -1 otherwise
         '400':
           $ref: '#/components/responses/400'
 

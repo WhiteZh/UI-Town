@@ -1,8 +1,8 @@
 <script setup>
 import {onMounted, ref} from "vue";
-  import DisplayCard from "@/components/DisplayCard.vue";
+import DisplayCard from "@/components/DisplayCard.vue";
 
-  const props = defineProps({
+const props = defineProps({
     contentType: {
       type: String,
       required: true,
@@ -24,13 +24,12 @@ import {onMounted, ref} from "vue";
         }
       })).json();
       if (ids.length > 0) {
-        let styles = await (await fetch(`/api/css?${ids.map(e => `id=${e}`).join('&')}`, {
+        list.value = await (await fetch(`/api/css?${ids.map(e => `id=${e}`).join('&')}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json'
           }
         })).json();
-        list.value = styles;
       }
     } catch (e) {
       console.log(e);

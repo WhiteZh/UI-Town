@@ -2,28 +2,22 @@ const express = require('express');
 const router = express.Router();
 
 const userController = require('../db/controllers/user');
-router.get('/isvalid', (req, res) => {
+router.get('/login', async (req, res) => {
     if (!req.query.password_hashed) {
         res.status(400).json({ error: "No hashed password is provided"});
         return;
     }
+    if (!req.query.email) {
+        res.status(400).json({ error: "No user identification is provided"});
+        return;
+    }
 
-    let callback = (err, user) => {
-       if (err) {
-           res.status(400).json({ error: err.message });
-           return;
-       }
-
-       res.json(user.password_hashed === req.query.password_hashed);
-   };
-
-   if (req.query.id) {
-       userController.getUserByID(req.query.id, callback);
-   } else if (req.query.email) {
-       userController.getUserByEmail(req.query.email, callback);
-   } else {
-       res.status(400).json({ error: "No user identification is provided" });
-   }
+    try {
+        let user = await userController.getUserByEmail(req.query.email);
+        res.json(user ? user.id : -1);
+    } catch (e) {
+        res.status(400).json({error: e.message});
+    }
 });
 
 module.exports = router;

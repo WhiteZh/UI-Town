@@ -4,48 +4,73 @@ const db = require('../db');
  * @param {string} name
  * @param {string} email
  * @param {string} password_hashed
- * @param {function(Error | null, number): void} callback
- * @returns {void}
+ * @returns {Promise<number>}
  */
-function createUser(name, email, password_hashed, callback) {
+function createUser(name, email, password_hashed) {
     if (!email.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)) {
-        callback(Error('Wrong email format'), -1);
-        return;
+        throw Error('Wrong email format');
     }
-    db.run(`INSERT INTO users (name, email, password_hashed) VALUES (?, ?, ?)`,
-        [name, email, password_hashed],
-        function(err) {
-            callback(err, this.lastID);
-        });
+    return new Promise((resolve, reject) => {
+        db.run(`INSERT INTO users (name, email, password_hashed) VALUES (?, ?, ?)`,
+            [name, email, password_hashed],
+            function (err) {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(this.lastID);
+                }
+            });
+    });
 }
 
 /**
  * @param {number} id
- * @param {function(Error | null, Object): void} callback
- * @returns {void}
+ * @returns {Promise<Object>}
  */
-function getUserByID(id, callback) {
-    db.get(`SELECT * FROM users WHERE id = ?`, [id], callback);
+function getUserByID(id) {
+    return new Promise((resolve, reject) => {
+        db.get(`SELECT * FROM users WHERE id = ?`, [id], (err, object) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(object);
+            }
+        });
+    })
 }
 
 /**
  * @param {string} email
- * @param {function(Error | null, Object): void} callback
- * @returns {void}
+ * @returns {Promise<Object>}
  */
-function getUserByEmail(email, callback) {
-    db.get(`SELECT * FROM users WHERE email = ?`, [email], callback);
+function getUserByEmail(email) {
+    return new Promise((resolve, reject) => {
+        db.get(`SELECT * FROM users WHERE email = ?`, [email], (err, object) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(object);
+            }
+        });
+    });
 }
 
 /**
  * @param {number} id
  * @param {Object} properties
- * @param {function(Error | null): void} callback
- * @returns {void}
+ * @returns {Promise<boolean>}
  */
-function updateUser(id, properties, callback) {
+function updateUser(id, properties) {
     let emplace = Array(Object.keys(properties).length).fill('? = ?').join(',');
-    db.run(`UPDATE users SET ${emplace} WHERE id = ?`, [...Object.entries(properties).flat(), id], callback);
+    return new Promise((resolve, reject) => {
+        db.run(`UPDATE users SET ${emplace} WHERE id = ?`, [...Object.entries(properties).flat(), id], (err) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(true);
+            }
+        });
+    })
 }
 
 module.exports = {
