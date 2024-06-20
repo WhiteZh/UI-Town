@@ -1,7 +1,7 @@
 <script setup>
-import {ref, getCurrentInstance} from "vue";
+import {inject, ref} from "vue";
 
-const messages = getCurrentInstance().appContext.config.globalProperties.$notifications;
+const messages = inject('notifications');
 </script>
 
 <template>
@@ -32,5 +32,6 @@ const messages = getCurrentInstance().appContext.config.globalProperties.$notifi
 
 .root>div>svg:hover {
   color: #333;
+  cursor: pointer;
 }
 </style>
