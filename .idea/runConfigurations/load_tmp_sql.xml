@@ -1,5 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="load tmp.sql" type="NodeJSConfigurationType" path-to-js-file="db/db_inits/load.js" working-dir="$PROJECT_DIR$">
-    <method v="2" />
-  </configuration>
-</component>

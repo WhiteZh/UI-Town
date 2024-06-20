@@ -1,7 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="setup" type="CompoundRunConfigurationType">
-    <toRun name="install (backend)" type="js.build_tools.npm" />
-    <toRun name="install (frontend)" type="js.build_tools.npm" />
-    <method v="2" />
-  </configuration>
-</component>
