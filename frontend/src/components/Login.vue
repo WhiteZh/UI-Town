@@ -12,8 +12,8 @@ const emits = defineEmits(['login']);
 
 const login = async () => {
   let email = emailInput.value.value;
-  let password_hashed = passwordInput.value.value;
-  let response = await fetch(`/api/users/login?email=${email}&password_hashed=${sha256(password_hashed)}`, {
+  let password_hashed = sha256(passwordInput.value.value);
+  let response = await fetch(`/api/users/login?email=${email}&password_hashed=${password_hashed}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json'
