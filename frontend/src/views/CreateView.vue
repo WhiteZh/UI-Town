@@ -2,7 +2,19 @@
 import NavBar from "@/components/NavigationBar.vue"
 import CodeDisplay from "@/components/CodeDisplay.vue";
 import {cssCategories} from "@/constants.js";
-import {ref} from "vue";
+import {inject, onMounted, ref} from "vue";
+import {useRouter} from "vue-router";
+
+onMounted(() => {
+  if (!inject('user').id) {
+    const router = useRouter();
+    router.push('/');
+    const notifications = inject('notifications');
+    notifications.push({
+      message: 'Please login before creating new styles'
+    });
+  }
+})
 
 const name = ref(null);
 const type = ref(null);
