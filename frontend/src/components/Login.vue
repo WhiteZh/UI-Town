@@ -1,11 +1,14 @@
 <script setup>
-import {ref, inject} from "vue";
+import {ref, inject, onMounted} from "vue";
 import {sha256} from "js-sha256";
 
 let notifications = inject('notifications');
+let user = inject('user');
 
 const emailInput = ref(null);
 const passwordInput = ref(null);
+
+const emits = defineEmits(['login']);
 
 const login = async () => {
   let email = emailInput.value.value;
@@ -19,27 +22,40 @@ const login = async () => {
   if (response.ok) {
     let content = await response.json();
     if (content >= 0) {
-      let user = inject('user');
       user.id = content;
       user.email = email;
       user.password_hashed = password_hashed;
+      notifications.push({message: 'Successfully logged in'});
+      emits('login', true);
     } else {
       notifications.push({
         message: "Username or password incorrect",
         color: 'red'
       });
+      emits('login', false);
     }
   } else {
     notifications.push({
       message: `Failed to login (400): ${(await response.json()).error}`,
       color: 'yellow'
     });
+    emits('login', false);
   }
 }
+
+const root = ref();
+onMounted(() => {
+  root.value.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+      login();
+    }
+  });
+  emailInput.value.focus();
+})
 </script>
 
 <template>
-<div class="container">
+<div class="container" ref="root">
   <div class="title"> UITOWN </div>
   <div class="info">
     <div style="display: flex; flex-direction: row;">
