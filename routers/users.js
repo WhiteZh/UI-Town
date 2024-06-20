@@ -13,7 +13,8 @@ router.get('/login', async (req, res) => {
     }
 
     try {
-        res.json(await userController.getUserByEmail(req.query.email));
+        let user = await userController.getUserByEmail(req.query.email);
+        res.json(user ? user.id : -1);
     } catch (e) {
         res.status(400).json({error: e.message});
     }
