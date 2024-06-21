@@ -89,8 +89,14 @@ async function createCSS(userID, password_hashed, name, html, css, category) {
     if (user.password_hashed !== password_hashed) {
         throw Error("Incorrect password");
     }
+    if (!name) {
+        throw Error("Must provide a name");
+    }
     if (categories.indexOf(category) === -1) {
         throw Error("Category does not exist");
+    }
+    if (!html) {
+        throw Error("HTML content must not be blank");
     }
 
     return new Promise((resolve, reject) => {
