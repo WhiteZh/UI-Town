@@ -11,7 +11,7 @@ body {
     background: linear-gradient(135deg, black, #737373);
     min-height: 100vh;
     max-height: 100vh;
-    overflow: scroll;
+    overflow: auto;
 }
 
 .no-link-style {
