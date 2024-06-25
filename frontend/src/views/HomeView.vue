@@ -1,5 +1,5 @@
 <script setup>
-  import {onMounted, ref} from "vue";
+  import {inject, onMounted, ref} from "vue";
   import NavigationBar from "@/components/NavigationBar.vue";
   import DropDown from "@/components/DropDown.vue";
   import DisplayMenu from "@/components/DisplayMenu.vue";
@@ -18,11 +18,15 @@
     {name: 'Menu', url: '/', colors: ['#8c52ff', '#5ce1e6']},
     {name: 'Visible Chart', url: '/', colors: ['#8c52ff', '#00bf63']},
   ]);
+
+  const session = inject('session');
+  let displayOA = !session.playedOA;
+  session.playedOA = true;
 </script>
 
 <template>
   <NavigationBar/>
-  <OpeningAnimation/>
+  <OpeningAnimation v-if="displayOA"/>
   <div class="header">
     <h3>To Select</h3>
     <h6>Choose the code of your choice</h6>
