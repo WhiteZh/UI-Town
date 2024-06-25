@@ -22,7 +22,7 @@
 
 <template>
   <NavigationBar/>
-<!--  <OpeningAnimation/>-->
+  <OpeningAnimation/>
   <div class="header">
     <h3>To Select</h3>
     <h6>Choose the code of your choice</h6>
