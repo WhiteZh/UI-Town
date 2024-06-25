@@ -9,7 +9,9 @@ let user = inject('user');
 
 <template>
   <div class="outer-login" v-if="openLogin" @click="openLogin = !openLogin"></div>
-  <Login v-if="openLogin" style="z-index: 1" v-on:login="(v) => openLogin = v ? false : openLogin"/>
+  <Teleport to="#app">
+    <Login v-if="openLogin" style="z-index: 1" v-on:login="(v) => openLogin = v ? false : openLogin"/>
+  </Teleport>
   <div class="navbar" id="navbar">
     <RouterLink class="home-title no-link-style" to="/"><img src="@/assets/logo.png" alt="UITOWN"/></RouterLink>
     <a href="#" class="no-link-style navbar-element">Information</a>
