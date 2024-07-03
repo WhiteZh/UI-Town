@@ -2,20 +2,13 @@
 import NavBar from "@/components/NavigationBar.vue"
 import CodeDisplay from "@/components/CodeDisplay.vue";
 import {cssCategories} from "@/constants.js";
-import {inject, onMounted, ref} from "vue";
-import {useRouter} from "vue-router";
+import {computed, inject, onMounted, ref, watch} from "vue";
+import {useRoute, useRouter} from "vue-router";
 
-onMounted(() => {
-  if (!inject('user').id) {
-    const router = useRouter();
-    router.push('/');
-    const notifications = inject('notifications');
-    notifications.push({
-      message: 'Please login before creating new styles',
-      color: 'yellow'
-    });
-  }
-})
+const route = useRoute();
+const router = useRouter();
+
+const mode = computed(() => route.meta.mode);
 
 const user = inject('user');
 const notifications = inject('notifications');
@@ -48,12 +41,56 @@ async function submit() {
     notifications.push({message: `Upload failed: ${(await res.json()).error}`, color: 'yellow'});
   }
 }
+
+
+const setup = async () => {
+  console.log(mode.value);
+  switch (mode.value) {
+    case 'create':
+      if (!user.id) {
+        await router.push('/');
+        notifications.push({
+          message: 'Please login before creating new styles',
+          color: 'yellow'
+        });
+      }
+      break;
+    case 'view':
+      let response = await fetch(`/api/css/?id=${route.params.id}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      if (response.ok) {
+        let body = await response.json();
+        if (body.length > 0) {
+          html.value = body[0].html;
+          css.value = body[0].css;
+        } else {
+          notifications.push({message: 'Id does not exist', color: 'yellow'});
+        }
+      } else {
+        let body = await response.json();
+        console.log(body);
+        notifications.push({message: `Failed to fetch data from server ${body.error}`, color: 'red'});
+      }
+      break;
+    case 'edit':
+      break;
+    default:
+      notifications.push({message: 'Unexpected behavior (unexpected mode for CodeView)', color: 'purple'});
+  }
+}
+
+onMounted(setup);
+watch(route, setup);
 </script>
 
 <template>
   <NavBar />
   <div class="main">
-    <div class="float">
+    <div class="float" v-if="mode === 'create'">
       <div>
         <label>Name</label>
         <input class="input" ref="name"/>
@@ -68,7 +105,7 @@ async function submit() {
       </div>
     </div>
     <div style="height: 2rem;"></div>
-    <CodeDisplay style="height: 75vh; margin: 0 auto; max-width: 2000px;" v-model:html="html" v-model:css="css"/>
+    <CodeDisplay style="height: 75vh; margin: 0 auto; max-width: 2000px;" v-if="html" v-model:html="html" v-model:css="css"/>
   </div>
 </template>
 
