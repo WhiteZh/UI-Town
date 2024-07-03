@@ -149,5 +149,6 @@ onMounted(() => {
   flex-grow: 1;
   background-color: #272727;
   padding-top: 0.2rem;
+  overflow: auto;
 }
 </style>
