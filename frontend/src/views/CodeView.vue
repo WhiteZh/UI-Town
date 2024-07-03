@@ -105,7 +105,7 @@ watch(route, setup);
       </div>
     </div>
     <div style="height: 2rem;"></div>
-    <CodeDisplay style="height: 75vh; margin: 0 auto; max-width: 2000px;" v-if="html" v-model:html="html" v-model:css="css"/>
+    <CodeDisplay style="height: 75vh; margin: 0 auto; max-width: 2000px;" v-if="html || mode === 'create'" v-model:html="html" v-model:css="css"/>
   </div>
 </template>
 
