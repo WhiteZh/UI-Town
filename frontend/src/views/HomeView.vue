@@ -9,6 +9,8 @@
     {name: 'Checkboxes', url: '/', colors: ['#ff5757', '#8c52ff']},
     {name: 'Toggle Switches', url: '/', colors: ['#8c52ff', '#5ce1e6']},
     {name: 'Loads', url: '/', colors: ['#8c52ff', '#00bf63']},
+    {name: 'Cards', url: '/', colors: ['#5170ff', '#ff66c4']},
+    {name: 'Inputs', url: '/', colors: ['#5de0e6', '#004aad']},
     {name: 'Transitions', url:'/', colors: ['#004add', '#cb6ce6']},
     {name: 'Special Effects', url: '/', colors: ['#0097b2', '#7ed957']}
   ]);
