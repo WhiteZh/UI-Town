@@ -9,6 +9,7 @@ const route = useRoute();
 const router = useRouter();
 
 const mode = computed(() => route.meta.mode);
+const codeID = ref(null);
 
 const user = inject('user');
 const notifications = inject('notifications');
@@ -56,6 +57,7 @@ const setup = async () => {
       }
       break;
     case 'view':
+      codeID.value = route.params.id;
       let response = await fetch(`/api/css/?id=${route.params.id}`, {
         method: 'GET',
         headers: {
@@ -83,12 +85,34 @@ const setup = async () => {
   }
 }
 
+const del = async () => {
+  if (!user) {
+    notifications.push({message: 'Login first', color: 'yellow'});
+    return;
+  }
+  let res = await fetch(`/api/css?id=${codeID.value}&password_hashed=${user.password_hashed}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    }
+  });
+  if (res.ok) {
+    notifications.push({message: 'successfully deleted'});
+  } else {
+    notifications.push({message: 'deletion failed'});
+    console.log(await res.json());
+  }
+}
+
 onMounted(setup);
 watch(route, setup);
 </script>
 
 <template>
   <NavBar />
+  <div style="position: absolute; right: 5rem; top: 5rem;" v-if="mode === 'view'">
+    <button @click="del">delete</button>
+  </div>
   <div class="main">
     <div class="float" v-if="mode === 'create'">
       <div>
