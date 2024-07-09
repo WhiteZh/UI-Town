@@ -111,8 +111,44 @@ async function createCSS(userID, password_hashed, name, html, css, category) {
     });
 }
 
+/**
+ * @param id {number}
+ * @param password_hashed {string}
+ * @return {Promise}
+ */
+async function deleteCSS(id, password_hashed) {
+    /**
+     * @type {Object}
+     * @property {number} author_id
+     */
+    let [style] = await getCSSs([id]);
+    if (style === undefined) {
+        throw Error('ID does not exist');
+    }
+    /**
+     * @type {Object}
+     * @property {string} password_hashed
+     */
+    let user = await userController.getUserByID(style.author_id);
+
+    if (user.password_hashed !== password_hashed) {
+        throw Error("Incorrect password!");
+    }
+
+    return new Promise((resolve, reject) => {
+        db.run(`DELETE FROM css WHERE id=${id}`, [], (err) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve();
+            }
+        })
+    });
+}
+
 module.exports = {
     getCSSs,
     getValidIDs,
     createCSS,
+    deleteCSS,
 }

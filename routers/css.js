@@ -50,6 +50,27 @@ router.post('/', async (req, res) => {
     }
 });
 
+router.delete('/', async (req, res) => {
+    /**
+     * @type {number}
+     */
+    let id = req.query.id;
+    /**
+     * @type {string}
+     */
+    let password_hashed = req.query.password_hashed;
+
+    try {
+        await cssController.deleteCSS(id, password_hashed);
+        res.json({
+            ok: true,
+            id: id,
+        });
+    } catch (e) {
+        res.status(400).json({error: e.message});
+    }
+});
+
 router.get('/valid', async (req, res) => {
     let options = {
         category: req.query.category,

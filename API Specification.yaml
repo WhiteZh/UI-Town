@@ -118,6 +118,36 @@ paths:
                 description: the ID of the CSS just created
         '400':
           $ref: '#/components/responses/400'
+    delete:
+      summary: Delete CSS
+      description: delete a CSS base on id
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: number
+        - name: password_hashed
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    description: always true
+                  id:
+                    type: number
+                    description: the id of the delete style
+        '400':
+          $ref: '#/components/responses/400'
   /api/css/valid:
     get:
       summary: Fetching IDs Of Existing CSS
@@ -194,10 +224,3 @@ paths:
                 description: positive integer representing the id if the (hashed) password is correct, -1 otherwise
         '400':
           $ref: '#/components/responses/400'
-
-
-
-
-
-
-
