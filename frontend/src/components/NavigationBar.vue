@@ -9,13 +9,15 @@ let user = inject('user');
 
 <template>
   <div class="outer-login" v-if="openLogin" @click="openLogin = !openLogin"></div>
-  <Login v-if="openLogin" style="z-index: 1" v-on:login="(v) => openLogin = v ? false : openLogin"/>
+  <Teleport to="#app">
+    <Login v-if="openLogin" style="z-index: 1" v-on:login="(v) => openLogin = v ? false : openLogin"/>
+  </Teleport>
   <div class="navbar" id="navbar">
     <RouterLink class="home-title no-link-style" to="/"><img src="@/assets/logo.png" alt="UITOWN"/></RouterLink>
     <a href="#" class="no-link-style navbar-element">Information</a>
     <a href="#" class="no-link-style navbar-element">Recommendation</a>
     <span style="flex-grow: 1"></span>
-    <a href='#' class="no-link-style navbar-option" style="background-color: #1ac8db" @click="openLogin = !openLogin" v-if="!user.id">Join in the Town</a>
+    <a href='#' class="no-link-style navbar-option" style="background-color: #1ac8db" @click.prevent="openLogin = !openLogin" v-if="!user.id">Join in the Town</a>
     <div v-if="user.id" style="background-color: whitesmoke; align-self: center; height: 2.2rem; width: 2.2rem; position: relative; border-radius: 1.1rem; margin: 0 0.5rem;">
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
         <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>

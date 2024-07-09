@@ -1,5 +1,5 @@
 <script setup>
-  import {onMounted, ref} from "vue";
+  import {inject, onMounted, ref} from "vue";
   import NavigationBar from "@/components/NavigationBar.vue";
   import DropDown from "@/components/DropDown.vue";
   import DisplayMenu from "@/components/DisplayMenu.vue";
@@ -9,6 +9,8 @@
     {name: 'Checkboxes', url: '/', colors: ['#ff5757', '#8c52ff']},
     {name: 'Toggle Switches', url: '/', colors: ['#8c52ff', '#5ce1e6']},
     {name: 'Loads', url: '/', colors: ['#8c52ff', '#00bf63']},
+    {name: 'Cards', url: '/', colors: ['#5170ff', '#ff66c4']},
+    {name: 'Inputs', url: '/', colors: ['#5de0e6', '#004aad']},
     {name: 'Transitions', url:'/', colors: ['#004add', '#cb6ce6']},
     {name: 'Special Effects', url: '/', colors: ['#0097b2', '#7ed957']}
   ]);
@@ -18,11 +20,15 @@
     {name: 'Menu', url: '/', colors: ['#8c52ff', '#5ce1e6']},
     {name: 'Visible Chart', url: '/', colors: ['#8c52ff', '#00bf63']},
   ]);
+
+  const session = inject('session');
+  let displayOA = !session.playedOA;
+  session.playedOA = true;
 </script>
 
 <template>
   <NavigationBar/>
-<!--  <OpeningAnimation/>-->
+  <OpeningAnimation v-if="displayOA"/>
   <div class="header">
     <h3>To Select</h3>
     <h6>Choose the code of your choice</h6>

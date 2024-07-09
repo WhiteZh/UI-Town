@@ -7,6 +7,7 @@ import router from './router'
 const app = createApp(App)
 app.provide('notifications', reactive([]));
 app.provide('user', reactive({}));
+app.provide('session', {});
 
 app.use(router)
 

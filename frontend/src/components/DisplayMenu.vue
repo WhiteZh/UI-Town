@@ -50,7 +50,7 @@ const props = defineProps({
       <span class="sort"><span style="font-size: 0.5rem">Sort : </span>Randomized</span>
     </div>
     <div class="main">
-      <DisplayCard v-for="each in list" :name="each.name" :subscribed="0" :css="each.css" :html="each.html"/>
+      <DisplayCard v-for="each in list" :name="each.name" :subscribed="0" :css="each.css" :html="each.html" :id="each.id"/>
     </div>
     <div class="footer">
 

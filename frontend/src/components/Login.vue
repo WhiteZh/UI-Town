@@ -43,29 +43,23 @@ const login = async () => {
   }
 }
 
-const root = ref();
 onMounted(() => {
-  root.value.addEventListener('keydown', (event) => {
-    if (event.key === 'Enter') {
-      login();
-    }
-  });
   emailInput.value.focus();
 })
 </script>
 
 <template>
-<div class="container" ref="root">
+<div class="container">
   <div class="title"> UITOWN </div>
   <div class="info">
     <div style="display: flex; flex-direction: row;">
       <div class="text" style="padding-left: 19%;">Email:</div>
-      <input class="input" ref="emailInput">
+      <input class="input" ref="emailInput" @keydown.enter="passwordInput.focus">
       <div class="shadow"></div>
     </div>
     <div style="display: flex; flex-direction: row;">
       <div class="text" style="padding-left:13%">Password:</div>
-      <input class="input" ref="passwordInput">
+      <input class="input" ref="passwordInput" @keydown.enter="login">
       <div class="shadow"></div>
     </div>
     <button class="login" @click="login">Login/Registration</button>

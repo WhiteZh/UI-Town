@@ -40,3 +40,10 @@ export const iframeContent = (html, css) => `
   </body>
   </html>
 `
+
+export const shadowContent = (html, css) => `
+<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);" id="the-id-of-the-shadow-root">
+    <style>${css}</style>
+    ${html}
+</div>
+`

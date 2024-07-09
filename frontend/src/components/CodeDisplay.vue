@@ -5,7 +5,7 @@ import { EditorState } from "@codemirror/state";
 import { html } from '@codemirror/lang-html';
 import { css } from '@codemirror/lang-css';
 import { iframeContent } from '@/constants.js'
-import { onMounted, ref } from "vue";
+import {onMounted, ref, watch} from "vue";
 
 const props = defineProps({
   html: {
@@ -52,8 +52,27 @@ onMounted(() => {
     parent: cssEditor.value,
   });
 
-  let lastHTML = htmlView.state.doc.toString();
-  let lastCSS = cssView.state.doc.toString();
+  watch(() => props.html, () => {
+    htmlView.dispatch({
+      changes: {
+        from: 0,
+        to: htmlView.state.doc.length,
+        insert: props.html
+      }
+    });
+  });
+  watch(() => props.css, () => {
+    cssView.dispatch({
+      changes: {
+        from: 0,
+        to: cssView.state.doc.length,
+        insert: props.css
+      }
+    });
+  });
+
+  let lastHTML = '';
+  let lastCSS = '';
   setInterval(() => {
     let html = htmlView.state.doc.toString();
     let css = cssView.state.doc.toString();
@@ -130,5 +149,6 @@ onMounted(() => {
   flex-grow: 1;
   background-color: #272727;
   padding-top: 0.2rem;
+  overflow: auto;
 }
 </style>
