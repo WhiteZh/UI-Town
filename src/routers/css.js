@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const cssController = require('../db/controllers/css');
+const cssController = require('../controllers/css');
 
 /**
  * @param {string | string[] | undefined} req.query.id
