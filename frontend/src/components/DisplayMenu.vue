@@ -1,40 +1,35 @@
-<script setup>
-import {onMounted, ref} from "vue";
+<script setup lang="ts">
+import {onMounted, Ref, ref} from "vue";
 import DisplayCard from "@/components/DisplayCard.vue";
+import {CSSCategory, CSSStyle} from "@/constants";
 
-const props = defineProps({
-    contentType: {
-      type: String,
-      required: true,
-    },
-    category: {
-      type: String,
-      required: true,
-    }
-  });
+const props = defineProps<{
+  contentType?: "css" | "js",
+  category?: CSSCategory
+}>();
 
-  const list = ref([]);
+const list: Ref<CSSStyle[]> = ref([]);
 
-  onMounted(async function() {
-    try {
-      let ids = await (await fetch('/api/css/valid', {
+onMounted(async function() {
+  try {
+    let ids: number[] = await (await fetch('/api/css/valid', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })).json();
+    if (ids.length > 0) {
+      list.value = await (await fetch(`/api/css?${ids.map(e => `id=${e}`).join('&')}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
         }
       })).json();
-      if (ids.length > 0) {
-        list.value = await (await fetch(`/api/css?${ids.map(e => `id=${e}`).join('&')}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        })).json();
-      }
-    } catch (e) {
-      console.log(e);
     }
-  });
+  } catch (e) {
+    console.log(e);
+  }
+});
 </script>
 
 <template>

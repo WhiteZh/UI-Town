@@ -1,12 +1,13 @@
-<script setup>
-import {ref, inject, onMounted} from "vue";
+<script setup lang="ts">
+import {ref, inject, onMounted, Ref} from "vue";
 import {sha256} from "js-sha256";
+import {Notification, User} from "@/constants";
 
-let notifications = inject('notifications');
-let user = inject('user');
+let notifications: Notification[] = inject('notifications')!;
+let user: User = inject('user')!;
 
-const emailInput = ref(null);
-const passwordInput = ref(null);
+const emailInput = ref() as Ref<HTMLInputElement>;
+const passwordInput = ref() as Ref<HTMLInputElement>;
 
 const emits = defineEmits(['login']);
 
@@ -20,7 +21,7 @@ const login = async () => {
     }
   });
   if (response.ok) {
-    let content = await response.json();
+    let content: number = await response.json();
     if (content >= 0) {
       user.id = content;
       user.email = email;

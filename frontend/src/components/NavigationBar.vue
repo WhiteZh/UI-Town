@@ -1,10 +1,11 @@
-<script setup>
+<script setup lang="ts">
 import Login from "@/components/Login.vue"
 import {inject, ref} from "vue";
 import { RouterLink } from "vue-router";
+import {User} from "@/constants";
 
 let openLogin = ref(false)
-let user = inject('user');
+let user: User = inject('user')!;
 </script>
 
 <template>

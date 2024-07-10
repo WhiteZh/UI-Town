@@ -1,46 +1,31 @@
-<script setup>
-import {onMounted, ref} from "vue";
-import {shadowContent} from '@/constants.js';
+<script setup lang="ts">
+import {onMounted, Ref, ref} from "vue";
+import {shadowContent} from '@/constants';
 import {useRouter} from "vue-router";
 
 const router = useRouter();
 
-const props = defineProps({
-  name: {
-    type: String,
-    required: true,
-  },
-  subscribed: {
-    type: Number,
-    required: true,
-  },
-  html: {
-    type: String,
-    required: true,
-  },
-  css: {
-    type: String,
-    required: true,
-  },
-  id: {
-    type: Number,
-    required: true,
-  },
-});
+const props = defineProps<{
+  name: string,
+  subscribed: number,
+  html: string,
+  css: string,
+  id: number
+}>();
 
-const cardContentRoot = ref();
+const cardContentRoot = ref() as Ref<HTMLDivElement>;
 onMounted(() => {
   let shadowDOM = cardContentRoot.value.attachShadow({mode: 'open'});
   shadowDOM.innerHTML = shadowContent(props.html, props.css);
-  const calcHeightRatio = (x) => cardContentRoot.value.offsetHeight * 0.9 / x;
-  const calcWidthRatio = (x) => cardContentRoot.value.offsetWidth * 0.9 / x;
+  const calcHeightRatio = (x: number) => cardContentRoot.value.offsetHeight * 0.9 / x;
+  const calcWidthRatio = (x: number) => cardContentRoot.value.offsetWidth * 0.9 / x;
   let ratio = Infinity;
-  for (let each of Array.from(shadowDOM.querySelectorAll('*')).filter((e) => getComputedStyle(e).position === 'absolute')) {
+  for (let each of Array.from(shadowDOM.querySelectorAll<HTMLElement>('*')).filter((e) => getComputedStyle(e).position === 'absolute')) {
     ratio = Math.min(ratio, calcHeightRatio(each.offsetHeight));
     ratio = Math.min(ratio, calcWidthRatio(each.offsetWidth));
   }
   if (ratio < 1) {
-    shadowDOM.getElementById('the-id-of-the-shadow-root').style.transform += ` scale(${ratio}) `;
+    (shadowDOM.getElementById('the-id-of-the-shadow-root') as HTMLDivElement).style.transform += ` scale(${ratio}) `;
   }
 })
 </script>

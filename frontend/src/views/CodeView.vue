@@ -1,21 +1,21 @@
-<script setup>
+<script setup lang="ts">
 import NavBar from "@/components/NavigationBar.vue"
 import CodeDisplay from "@/components/CodeDisplay.vue";
-import {cssCategories} from "@/constants.js";
-import {computed, inject, onMounted, ref, watch} from "vue";
+import {User, Notification, CSSStyle, CSSCategory} from "@/constants";
+import {computed, ComputedRef, inject, onMounted, Ref, ref, watch} from "vue";
 import {useRoute, useRouter} from "vue-router";
 
 const route = useRoute();
 const router = useRouter();
 
-const mode = computed(() => route.meta.mode);
-const codeID = ref(null);
+const mode = computed(() => route.meta.mode) as ComputedRef<"create" | "view" | "edit">;
+const codeID = ref<number>();
 
-const user = inject('user');
-const notifications = inject('notifications');
+const user: User = inject('user')!;
+const notifications: Notification[] = inject('notifications')!;
 
-const name = ref(null);
-const type = ref(null);
+const name = ref() as Ref<HTMLInputElement>;
+const type = ref() as Ref<HTMLSelectElement>;
 
 const html = ref('');
 const css = ref('');
@@ -57,7 +57,7 @@ const setup = async () => {
       }
       break;
     case 'view':
-      codeID.value = route.params.id;
+      codeID.value = parseInt(route.params.id as string);
       let response = await fetch(`/api/css/?id=${route.params.id}`, {
         method: 'GET',
         headers: {
@@ -65,7 +65,7 @@ const setup = async () => {
         }
       });
       if (response.ok) {
-        let body = await response.json();
+        let body: CSSStyle[] = await response.json();
         if (body.length > 0) {
           html.value = body[0].html;
           css.value = body[0].css;
@@ -73,7 +73,7 @@ const setup = async () => {
           notifications.push({message: 'Id does not exist', color: 'yellow'});
         }
       } else {
-        let body = await response.json();
+        let body: {error: string} = await response.json();
         console.log(body);
         notifications.push({message: `Failed to fetch data from server ${body.error}`, color: 'red'});
       }
@@ -86,7 +86,7 @@ const setup = async () => {
 }
 
 const del = async () => {
-  if (!user) {
+  if (!user.id) {
     notifications.push({message: 'Login first', color: 'yellow'});
     return;
   }
@@ -124,7 +124,7 @@ watch(route, setup);
         <label>Type</label>
         <select class="input" ref="type">
           <option>---</option>
-          <option v-for="cate in cssCategories">{{cate}}</option>
+          <option v-for="cate in Object.values(CSSCategory)">{{cate}}</option>
         </select>
       </div>
     </div>
