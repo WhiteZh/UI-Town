@@ -1,6 +1,6 @@
 import express from 'express';
 import {Response} from "express";
-import {getCSSs, createCSS, deleteCSS, getValidIDs, CSSCategory, CSSCategories} from '../controllers/css';
+import {getCSSs, createCSS, deleteCSS, getValidIDs, CSSCategory, cssCategories} from '../controllers/css';
 import {CSS} from "../controllers/css";
 import {ErrRes, newErrRes} from "./util";
 
@@ -34,7 +34,7 @@ router.post('/', async (req, res: Response<number | ErrRes>) => {
         typeof req.body.html !== 'string' ||
         typeof req.body.css !== 'string' ||
         typeof req.body.category !== 'string' ||
-        !CSSCategories.includes(req.body.category)
+        !cssCategories.includes(req.body.category)
     ) {
         res.status(400).json({error: 'Bad request'});
         return;

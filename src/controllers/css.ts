@@ -68,7 +68,7 @@ export function getValidIDs(options: {
 }
 
 
-export const CSSCategories = [
+export const cssCategories = [
     "button",
     "checkbox",
     "toggle switch",
@@ -78,7 +78,7 @@ export const CSSCategories = [
     "transition",
     "special effect",
 ] as const;
-export type CSSCategory = typeof CSSCategories[number];
+export type CSSCategory = typeof cssCategories[number];
 export async function createCSS(userID: number, password_hashed: string, name: string, html: string, css: string, category: CSSCategory): Promise<number> {
     let user = await getUserByID(userID);
     if (!user) {
