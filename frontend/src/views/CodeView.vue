@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import NavBar from "@/components/NavigationBar.vue"
 import CodeDisplay from "@/components/CodeDisplay.vue";
-import {User, Notification, CSSStyle, CSSCategory} from "@/constants";
+import {User, Notification, CSSStyle, cssCategories} from "@/constants";
 import {computed, ComputedRef, inject, onMounted, Ref, ref, watch} from "vue";
 import {useRoute, useRouter} from "vue-router";
 
@@ -124,7 +124,7 @@ watch(route, setup);
         <label>Type</label>
         <select class="input" ref="type">
           <option>---</option>
-          <option v-for="cate in Object.values(CSSCategory)">{{cate}}</option>
+          <option v-for="cate in cssCategories">{{cate}}</option>
         </select>
       </div>
     </div>

@@ -63,16 +63,18 @@ export type Session = {
     playedOA: boolean
 };
 
-export enum CSSCategory {
-    Button = "button",
-    Checkbox = "checkbox",
-    ToggleSwitch = "toggle switch",
-    Loader = "loader",
-    Card = "card",
-    Input = "input",
-    Transition = "transition",
-    SpecialEffect = "special effect",
-}
+export const cssCategories = [
+    "button",
+    "checkbox",
+    "toggle switch",
+    "loader",
+    "card",
+    "input",
+    "transition",
+    "special effect",
+] as const;
+
+export type CSSCategory = typeof cssCategories[number];
 
 export type CSSStyle = {
     id: number,
