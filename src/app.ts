@@ -1,7 +1,7 @@
-const express = require('express');
-const morgan = require('morgan');
-const cors = require('cors');
-const path = require('path');
+import express from 'express';
+import morgan from 'morgan';
+import cors from 'cors';
+import path from 'path';
 
 const app = express();
 const port = process.env.PORT || 80;
@@ -12,8 +12,8 @@ app.use(cors());
 
 app.use(express.static(path.join(__dirname, 'frontend', 'dist')));
 
-const cssRouter = require('./routers/css');
-const usersRouter = require('./routers/users');
+import cssRouter from './routers/css';
+import usersRouter from './routers/users';
 
 app.use('/api/css', cssRouter);
 app.use('/api/users', usersRouter);

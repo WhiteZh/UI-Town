@@ -1,8 +1,10 @@
-const sqlite3 = require('sqlite3').verbose();
-const path = require('path');
-const fs = require('fs');
+import {verbose} from "sqlite3";
+import path from 'path';
+import fs from 'fs';
 
-let db = new sqlite3.Database(path.join(__dirname, '../db/database.sqlite'), (err) => {
+const sqlite3 = verbose();
+
+const db = new sqlite3.Database(path.join(__dirname, '../db/database.sqlite'), (err: Error|null) => {
     if (err) {
         console.error(err.message);
     } else {
@@ -17,20 +19,20 @@ if (fs.existsSync(version_path)) {
     db_version = parseInt(fs.readFileSync(version_path).toString());
 }
 
-fs.readdir(path.join(__dirname, '../db/db_inits'), (err, files) => {
+fs.readdir(path.join(__dirname, '../db/db_inits'), (err: Error|null, files: string[]) => {
     if (err) {
         console.error(err.message);
         return;
     }
 
     files = files.filter(name => name.match(/^[0-9]+\.sql$/));
-    files = files.filter(name => parseInt(name.match(/^[0-9]+/)[0]) > db_version);
+    files = files.filter(name => parseInt((name.match(/^[0-9]+/) ?? ['0'])[0]) > db_version);
     if (files.length === 0) {
         console.log("No initialization process is required to be performed.");
         return;
     }
-    files = files.sort((a, b) => parseInt(a.match(/^[0-9]+/)[0]) - parseInt(b.match(/^[0-9]+/)[0]));
-    db_version = parseInt(files[files.length-1].match(/^[0-9]+/)[0]);
+    files = files.sort((a, b) => parseInt(a.match(/^[0-9]+/)![0]) - parseInt(b.match(/^[0-9]+/)![0]));
+    db_version = parseInt(files[files.length-1].match(/^[0-9]+/)![0]);
     console.log(files);
     let cnt = files.length;
     for (let i = 0; i < files.length; i++) {
@@ -47,7 +49,7 @@ fs.readdir(path.join(__dirname, '../db/db_inits'), (err, files) => {
                     let cnt = files.length;
                     for (let command of files) {
                         console.log(command);
-                        db.exec(command, err => {
+                        db.exec(command, (err: Error|null) => {
                             if (err) {
                                 console.error(err.message);
                             }
@@ -69,4 +71,5 @@ fs.readdir(path.join(__dirname, '../db/db_inits'), (err, files) => {
     }
 });
 
-module.exports = db;
+
+export default db;

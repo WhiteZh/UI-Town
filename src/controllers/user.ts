@@ -1,12 +1,15 @@
-const db = require('../db');
+import db from '../db';
 
-/**
- * @param {string} name
- * @param {string} email
- * @param {string} password_hashed
- * @returns {Promise<number>}
- */
-function createUser(name, email, password_hashed) {
+
+export type User = {
+    id: number,
+    name: string,
+    email: string,
+    password_hashed: string,
+}
+
+
+export function createUser(name: string, email: string, password_hashed: string): Promise<number> {
     if (!email.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)) {
         throw Error('Wrong email format');
     }
@@ -23,13 +26,10 @@ function createUser(name, email, password_hashed) {
     });
 }
 
-/**
- * @param {number} id
- * @returns {Promise<Object>}
- */
-function getUserByID(id) {
+
+export function getUserByID(id: number): Promise<User> {
     return new Promise((resolve, reject) => {
-        db.get(`SELECT * FROM users WHERE id = ?`, [id], (err, object) => {
+        db.get(`SELECT * FROM users WHERE id = ?`, [id], (err, object: User) => {
             if (err) {
                 reject(err);
             } else {
@@ -39,13 +39,10 @@ function getUserByID(id) {
     })
 }
 
-/**
- * @param {string} email
- * @returns {Promise<Object>}
- */
-function getUserByEmail(email) {
+
+export function getUserByEmail(email: string): Promise<User> {
     return new Promise((resolve, reject) => {
-        db.get(`SELECT * FROM users WHERE email = ?`, [email], (err, object) => {
+        db.get(`SELECT * FROM users WHERE email = ?`, [email], (err, object: User) => {
             if (err) {
                 reject(err);
             } else {
@@ -55,12 +52,12 @@ function getUserByEmail(email) {
     });
 }
 
-/**
- * @param {number} id
- * @param {Object} properties
- * @returns {Promise<boolean>}
- */
-function updateUser(id, properties) {
+
+export function updateUser(id: number, properties: {
+    name?: string,
+    email?: string,
+    password_hashed?: string,
+}): Promise<boolean> {
     let emplace = Array(Object.keys(properties).length).fill('? = ?').join(',');
     return new Promise((resolve, reject) => {
         db.run(`UPDATE users SET ${emplace} WHERE id = ?`, [...Object.entries(properties).flat(), id], (err) => {
@@ -72,10 +69,3 @@ function updateUser(id, properties) {
         });
     })
 }
-
-module.exports = {
-    createUser,
-    getUserByID,
-    getUserByEmail,
-    updateUser,
-};
