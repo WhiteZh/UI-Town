@@ -26,7 +26,7 @@ let iframeValue = ref(iframeContent('', ''));
 
 onMounted(() => {
   // number 12 is autocompletion
-  let setupExtensions: Extension[] = (basicSetup as Extension[]).filter((_, i) => [12].includes(i));
+  let setupExtensions: Extension[] = (basicSetup as Extension[]).filter((_, i) => ![12].includes(i));
   const htmlExtensions = [setupExtensions, oneDark, html()];
   const cssExtensions = [setupExtensions, oneDark, css()];
 
@@ -50,22 +50,23 @@ onMounted(() => {
     parent: cssEditor.value,
   });
 
-  watch(() => props.html, () => {
-    htmlView.dispatch({
-      changes: {
-        from: 0,
-        to: htmlView.state.doc.length,
-        insert: props.html
+  [{src: () => props.html, view: htmlView}, {src: () => props.css, view: cssView}].forEach(({src, view}) => {
+    watch(src, () => {
+      if (src() === view.state.doc.toString()) {
+        return;
       }
-    });
-  });
-  watch(() => props.css, () => {
-    cssView.dispatch({
-      changes: {
-        from: 0,
-        to: cssView.state.doc.length,
-        insert: props.css
-      }
+      // keep cursor location even if view got dispatched/updated
+      // let cursor = Math.min(view.state.selection.main.head, src().length);
+      view.dispatch({
+        changes: {
+          from: 0,
+          to: view.state.doc.length,
+          insert: src(),
+        },
+        // selection: {
+        //   anchor: cursor,
+        // }
+      });
     });
   });
 
