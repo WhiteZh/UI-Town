@@ -56,7 +56,7 @@ router.post('/', async (req, res: Response<number | ErrRes>) => {
     }
 });
 
-router.delete('/', async (req, res: Response<{ok: boolean, id: number} | ErrRes>) => {
+router.delete('/', async (req, res: Response<void | ErrRes>) => {
     let id = req.query.id;
     let password_hashed = req.query.password_hashed;
 
@@ -69,10 +69,7 @@ router.delete('/', async (req, res: Response<{ok: boolean, id: number} | ErrRes>
 
     try {
         await deleteCSS(ID, password_hashed.toString());
-        res.json({
-            ok: true,
-            id: ID,
-        });
+        res.send();
     } catch (e) {
         res.status(400).json({error: newErrRes(e)});
     }
