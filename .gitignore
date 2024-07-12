@@ -4,5 +4,5 @@ db/database.sqlite
 db/db_inits/tmp.sql
 /db/db-version.txt
 .idea/
-dist/
-dist/*
+build/
+build/*
