@@ -1,32 +1,26 @@
 <script setup lang="ts">
-import {onMounted, Ref, ref} from "vue";
+import {inject, onMounted, Ref, ref} from "vue";
 import DisplayCard from "@/components/DisplayCard.vue";
-import {CSSCategory, CSSStyle} from "@/constants";
+import {CSSCategory, CSSStyle, Notification} from "@/constants";
+import {getCSSByIds, getValidCSSIds} from "@/api";
 
 const props = defineProps<{
   contentType?: "css" | "js",
   category?: CSSCategory
 }>();
 
+const notifications: Notification[] = inject('notifications')!;
+
 const list: Ref<CSSStyle[]> = ref([]);
 
 onMounted(async function() {
   try {
-    let ids: number[] = await (await fetch('/api/css/valid', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })).json();
+    let ids = await getValidCSSIds();
     if (ids.length > 0) {
-      list.value = await (await fetch(`/api/css?${ids.map(e => `id=${e}`).join('&')}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })).json();
+      list.value = await getCSSByIds(ids);
     }
   } catch (e) {
+    notifications.push({message: String(e), color: 'red'});
     console.log(e);
   }
 });

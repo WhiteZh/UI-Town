@@ -4,6 +4,7 @@ import CodeDisplay from "@/components/CodeDisplay.vue";
 import {User, Notification, CSSStyle, cssCategories} from "@/constants";
 import {computed, ComputedRef, inject, onMounted, Ref, ref, watch} from "vue";
 import {useRoute, useRouter} from "vue-router";
+import {createCSSStyle, deleteCSSStyle, getCSSByIds} from "@/api";
 
 const route = useRoute();
 const router = useRouter();
@@ -11,7 +12,7 @@ const router = useRouter();
 const mode = computed(() => route.meta.mode) as ComputedRef<"create" | "view" | "edit">;
 const codeID = ref<number>();
 
-const user: User|{} = inject('user')!;
+const user: Ref<User|undefined> = inject('user')!;
 const notifications: Notification[] = inject('notifications')!;
 
 const name = ref() as Ref<HTMLInputElement>;
@@ -22,28 +23,23 @@ const css = ref('');
 
 async function submit() {
   console.log(user);
-  if (!('id' in user)) {
+  if (!user.value) {
     notifications.push({message: 'Not logged in', color: 'yellow'});
     return;
   }
-  let res = await fetch('/api/css', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      userID: user.id,
-      password_hashed: user.password_hashed,
-      name: name.value.value,
-      category: type.value.value,
-      html: html.value,
-      css: css.value,
-    })
-  });
-  if (res.ok) {
+  try {
+    await createCSSStyle(
+        user.value.id,
+        user.value.password_hashed,
+        name.value.value,
+        type.value.value,
+        html.value,
+        css.value
+    );
     notifications.push({message: 'Successfully created a new style'});
-  } else {
-    notifications.push({message: `Upload failed: ${(await res.json()).error}`, color: 'yellow'});
+  } catch (e) {
+    console.log(e);
+    notifications.push({message: `Upload failed: ${String(e)}`, color: 'yellow'});
   }
 }
 
@@ -52,7 +48,7 @@ const setup = async () => {
   console.log(mode.value);
   switch (mode.value) {
     case 'create':
-      if (!('id' in user)) {
+      if (!user.value) {
         await router.push('/');
         notifications.push({
           message: 'Please login before creating new styles',
@@ -62,24 +58,17 @@ const setup = async () => {
       break;
     case 'view':
       codeID.value = parseInt(route.params.id as string);
-      let response = await fetch(`/api/css/?id=${route.params.id}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-      if (response.ok) {
-        let body: CSSStyle[] = await response.json();
-        if (body.length > 0) {
-          html.value = body[0].html;
-          css.value = body[0].css;
+      try {
+        let styles = await getCSSByIds([parseInt(route.params.id as string)]);
+        if (styles.length > 0) {
+          html.value = styles[0].html;
+          css.value = styles[0].css;
         } else {
           notifications.push({message: 'Id does not exist', color: 'yellow'});
         }
-      } else {
-        let body: {error: string} = await response.json();
-        console.log(body);
-        notifications.push({message: `Failed to fetch data from server ${body.error}`, color: 'red'});
+      } catch (e) {
+        console.log(e);
+        notifications.push({message: `Failed to fetch data from server ${String(e)}`, color: 'red'});
       }
       break;
     case 'edit':
@@ -90,21 +79,20 @@ const setup = async () => {
 }
 
 const del = async () => {
-  if (!('id' in user)) {
+  if (!user.value) {
     notifications.push({message: 'Login first', color: 'yellow'});
     return;
   }
-  let res = await fetch(`/api/css?id=${codeID.value}&password_hashed=${user.password_hashed}`, {
-    method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-    }
-  });
-  if (res.ok) {
+  if (codeID.value === undefined) {
+    notifications.push({message: "Cannot delete a style that hasn't been uploaded", color: "yellow"});
+    return;
+  }
+  try {
+    await deleteCSSStyle(codeID.value, user.value.password_hashed);
     notifications.push({message: 'successfully deleted'});
-  } else {
+  } catch (e) {
     notifications.push({message: 'deletion failed'});
-    console.log(await res.json());
+    console.log(e);
   }
 }
 

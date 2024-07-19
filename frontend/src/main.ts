@@ -1,6 +1,6 @@
 import './assets/main.css'
 
-import {createApp, reactive} from 'vue'
+import {createApp, reactive, ref} from 'vue'
 import App from './App.vue'
 import router from './router'
 import {Notification, User, Session} from '@/constants'
@@ -10,8 +10,8 @@ const app = createApp(App)
 let notifications: Notification[] = [];
 app.provide('notifications', reactive(notifications));
 
-let user: User|{} = {};
-app.provide('user', reactive(user));
+let user = ref<User>();
+app.provide('user', user);
 
 let session: Session = {
     playedOA: false
