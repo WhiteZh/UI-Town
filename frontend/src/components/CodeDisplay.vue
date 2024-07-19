@@ -1,36 +1,34 @@
-<script setup>
+<script setup lang="ts">
 import { EditorView, basicSetup } from "codemirror";
 import { oneDark } from "@codemirror/theme-one-dark";
-import { EditorState } from "@codemirror/state";
+import {EditorState, Extension} from "@codemirror/state";
 import { html } from '@codemirror/lang-html';
 import { css } from '@codemirror/lang-css';
-import { iframeContent } from '@/constants.js'
-import {onMounted, ref, watch} from "vue";
+import { iframeContent } from '@/constants'
+import {onMounted, Ref, ref, watch} from "vue";
 
-const props = defineProps({
-  html: {
-    type: String,
-    default: '',
-  },
-  css: {
-    type: String,
-    default: '',
-  },
+const props = withDefaults(defineProps<{
+  html: string,
+  css: string,
+}>(), {
+  html: '',
+  css: '',
 });
 
 const emit = defineEmits(['update:html', 'update:css']);
 
-const activeTab = ref('html');
+const activeTab: Ref<"html" | "css"> = ref('html');
 
-const htmlEditor = ref(null);
-const cssEditor = ref(null);
+const htmlEditor = ref() as Ref<HTMLDivElement>;
+const cssEditor = ref() as Ref<HTMLDivElement>;
 
 let iframeValue = ref(iframeContent('', ''));
 
 onMounted(() => {
   // number 12 is autocompletion
-  const htmlExtensions = [basicSetup.filter((e, i) => i !== 12), oneDark, html()];
-  const cssExtensions = [basicSetup.filter((e, i) => i !== 12), oneDark, css()];
+  let setupExtensions: Extension[] = (basicSetup as Extension[]).filter((_, i) => ![12].includes(i));
+  const htmlExtensions = [setupExtensions, oneDark, html()];
+  const cssExtensions = [setupExtensions, oneDark, css()];
 
   const htmlState = EditorState.create({
     doc: props.html,
@@ -52,22 +50,23 @@ onMounted(() => {
     parent: cssEditor.value,
   });
 
-  watch(() => props.html, () => {
-    htmlView.dispatch({
-      changes: {
-        from: 0,
-        to: htmlView.state.doc.length,
-        insert: props.html
+  [{src: () => props.html, view: htmlView}, {src: () => props.css, view: cssView}].forEach(({src, view}) => {
+    watch(src, () => {
+      if (src() === view.state.doc.toString()) {
+        return;
       }
-    });
-  });
-  watch(() => props.css, () => {
-    cssView.dispatch({
-      changes: {
-        from: 0,
-        to: cssView.state.doc.length,
-        insert: props.css
-      }
+      // keep cursor location even if view got dispatched/updated
+      // let cursor = Math.min(view.state.selection.main.head, src().length);
+      view.dispatch({
+        changes: {
+          from: 0,
+          to: view.state.doc.length,
+          insert: src(),
+        },
+        // selection: {
+        //   anchor: cursor,
+        // }
+      });
     });
   });
 

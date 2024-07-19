@@ -1,14 +1,21 @@
-const db = require('../db');
+import db from '../db';
+import {getUserByID} from './user';
+import {RunResult} from "sqlite3";
 
-const userController = require('./user');
+export type CSS = {
+    id: number,
+    name: string,
+    viewed_time: number,
+    author_id: number,
+    html: string,
+    css: string,
+    category: CSSCategory,
+}
 
-/**
- * @param {number[]} ids
- * @returns {Promise<Object[]>}
- */
-function getCSSs(ids) {
+
+export function getCSSs(ids: number[]): Promise<CSS[]> {
     return new Promise((resolve, reject) => {
-        db.all(`SELECT * FROM css WHERE id IN (${ids.map(() => '?').join(',')})`, ids, (err, objects) => {
+        db.all(`SELECT * FROM css WHERE id IN (${ids.map(() => '?').join(',')})`, ids, (err: Error|null, objects: CSS[]) => {
             if (err) {
                 reject(err);
             } else {
@@ -18,15 +25,13 @@ function getCSSs(ids) {
     });
 }
 
-/**
- * @param {Object} options
- * @param {string | undefined} options.category
- * @param {number | undefined} options.limit
- * @param {number | undefined} options.offset
- * @param {string[]} options.order
- * @returns {Promise<number[]>}
- */
-function getValidIDs(options) {
+
+export function getValidIDs(options: {
+    category?: string,
+    limit?: number,
+    offset?: number,
+    order?: string[]
+}): Promise<number[]> {
     let where = '';
     let order = '';
     let limit = '';
@@ -52,7 +57,7 @@ function getValidIDs(options) {
         }
     }
     return new Promise((resolve, reject) => {
-        db.all(`SELECT id FROM css ${where} ${order} ${limit}`, params, (err, objects) => {
+        db.all(`SELECT id FROM css ${where} ${order} ${limit}`, params, (err: Error|null, objects: CSS[]) => {
             if (err) {
                 reject(err);
             } else {
@@ -62,27 +67,20 @@ function getValidIDs(options) {
     });
 }
 
-const categories = [
-    'button',
-    'checkbox',
-    'toggle switch',
-    'card',
-    'loader',
-    'input',
-    'transition',
-    'special effect'
-];
-/**
- * @param {number} userID
- * @param {string} password_hashed
- * @param {string} name
- * @param {string} html
- * @param {string} css
- * @param {string} category
- * @returns {Promise<number>}
- */
-async function createCSS(userID, password_hashed, name, html, css, category) {
-    let user = await userController.getUserByID(userID);
+
+export const cssCategories = [
+    "button",
+    "checkbox",
+    "toggle switch",
+    "loader",
+    "card",
+    "input",
+    "transition",
+    "special effect",
+] as const;
+export type CSSCategory = typeof cssCategories[number];
+export async function createCSS(userID: number, password_hashed: string, name: string, html: string, css: string, category: CSSCategory): Promise<number> {
+    let user = await getUserByID(userID);
     if (!user) {
         throw Error("User does not exist");
     }
@@ -92,16 +90,13 @@ async function createCSS(userID, password_hashed, name, html, css, category) {
     if (!name) {
         throw Error("Must provide a name");
     }
-    if (categories.indexOf(category) === -1) {
-        throw Error("Category does not exist");
-    }
     if (!html) {
         throw Error("HTML content must not be blank");
     }
 
     return new Promise((resolve, reject) => {
         db.run(`INSERT INTO css (name, author_id, html, css, category) VALUES (?, ?, ?, ?, ?)`, [name, userID, html, css, category],
-            function (err) {
+            function (this:RunResult, err: Error|null) {
                 if (err) {
                     reject(err);
                 } else {
@@ -111,25 +106,13 @@ async function createCSS(userID, password_hashed, name, html, css, category) {
     });
 }
 
-/**
- * @param id {number}
- * @param password_hashed {string}
- * @return {Promise}
- */
-async function deleteCSS(id, password_hashed) {
-    /**
-     * @type {Object}
-     * @property {number} author_id
-     */
+
+export async function deleteCSS(id: number, password_hashed: string): Promise<void> {
     let [style] = await getCSSs([id]);
     if (style === undefined) {
         throw Error('ID does not exist');
     }
-    /**
-     * @type {Object}
-     * @property {string} password_hashed
-     */
-    let user = await userController.getUserByID(style.author_id);
+    let user = await getUserByID(style.author_id);
 
     if (user.password_hashed !== password_hashed) {
         throw Error("Incorrect password!");
@@ -144,11 +127,4 @@ async function deleteCSS(id, password_hashed) {
             }
         })
     });
-}
-
-module.exports = {
-    getCSSs,
-    getValidIDs,
-    createCSS,
-    deleteCSS,
 }
