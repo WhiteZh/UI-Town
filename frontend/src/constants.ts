@@ -49,9 +49,9 @@ export const shadowContent = (html: string, css: string) => `
 `;
 
 export type User = {
-    id?: number,
-    email?: string,
-    password_hashed?: string,
+    id: number,
+    email: string,
+    password_hashed: string,
 };
 
 export type Notification = {

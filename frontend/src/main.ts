@@ -10,7 +10,7 @@ const app = createApp(App)
 let notifications: Notification[] = [];
 app.provide('notifications', reactive(notifications));
 
-let user: User = {};
+let user: User|{} = {};
 app.provide('user', reactive(user));
 
 let session: Session = {

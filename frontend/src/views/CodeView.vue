@@ -11,7 +11,7 @@ const router = useRouter();
 const mode = computed(() => route.meta.mode) as ComputedRef<"create" | "view" | "edit">;
 const codeID = ref<number>();
 
-const user: User = inject('user')!;
+const user: User|{} = inject('user')!;
 const notifications: Notification[] = inject('notifications')!;
 
 const name = ref() as Ref<HTMLInputElement>;
@@ -22,6 +22,10 @@ const css = ref('');
 
 async function submit() {
   console.log(user);
+  if (!('id' in user)) {
+    notifications.push({message: 'Not logged in', color: 'yellow'});
+    return;
+  }
   let res = await fetch('/api/css', {
     method: 'POST',
     headers: {
@@ -48,7 +52,7 @@ const setup = async () => {
   console.log(mode.value);
   switch (mode.value) {
     case 'create':
-      if (!user.id) {
+      if (!('id' in user)) {
         await router.push('/');
         notifications.push({
           message: 'Please login before creating new styles',
@@ -86,7 +90,7 @@ const setup = async () => {
 }
 
 const del = async () => {
-  if (!user.id) {
+  if (!('id' in user)) {
     notifications.push({message: 'Login first', color: 'yellow'});
     return;
   }
