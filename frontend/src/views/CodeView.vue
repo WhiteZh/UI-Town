@@ -5,15 +5,13 @@ import {User, Notification, CSSStyle, cssCategories} from "@/constants";
 import {computed, ComputedRef, inject, onMounted, Ref, ref, watch} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import {createCSSStyle, deleteCSSStyle, getCSSByIds} from "@/api";
+import {user, notifications} from "@/globs";
 
 const route = useRoute();
 const router = useRouter();
 
 const mode = computed(() => route.meta.mode) as ComputedRef<"create" | "view" | "edit">;
 const codeID = ref<number>();
-
-const user: Ref<User|undefined> = inject('user')!;
-const notifications: Notification[] = inject('notifications')!;
 
 const name = ref() as Ref<HTMLInputElement>;
 const type = ref() as Ref<HTMLSelectElement>;

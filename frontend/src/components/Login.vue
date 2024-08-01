@@ -1,11 +1,8 @@
 <script setup lang="ts">
 import {ref, inject, onMounted, Ref} from "vue";
 import {sha256} from "js-sha256";
-import {Notification, User} from "@/constants";
 import {getUserIdByLoginInfo} from "@/api";
-
-let notifications: Notification[] = inject('notifications')!;
-let user: Ref<User|undefined> = inject('user')!;
+import {notifications, user} from "@/globs";
 
 const emailInput = ref() as Ref<HTMLInputElement>;
 const passwordInput = ref() as Ref<HTMLInputElement>;

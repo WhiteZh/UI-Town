@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import {inject, ref} from "vue";
-import {Notification} from "@/constants";
-
-const notifications: Notification[] = inject('notifications')!;
+import {notifications} from "@/globs";
 </script>
 
 <template>

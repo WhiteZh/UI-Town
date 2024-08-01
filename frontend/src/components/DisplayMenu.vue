@@ -3,13 +3,12 @@ import {inject, onMounted, Ref, ref} from "vue";
 import DisplayCard from "@/components/DisplayCard.vue";
 import {CSSCategory, CSSStyle, Notification} from "@/constants";
 import {getCSSByIds, getValidCSSIds} from "@/api";
+import {notifications} from "@/globs";
 
 const props = defineProps<{
   contentType?: "css" | "js",
   category?: CSSCategory
 }>();
-
-const notifications: Notification[] = inject('notifications')!;
 
 const list: Ref<CSSStyle[]> = ref([]);
 

@@ -3,9 +3,9 @@ import Login from "@/components/Login.vue"
 import {computed, inject, Ref, ref} from "vue";
 import { RouterLink } from "vue-router";
 import {User} from "@/constants";
+import {user} from "@/globs";
 
 let openLogin = ref(false)
-let user: Ref<User|undefined> = inject('user')!;
 </script>
 
 <template>
