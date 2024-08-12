@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import NavBar from "@/components/NavigationBar.vue"
-import CodeDisplay from "@/components/CodeDisplay.vue";
+import CodeDisplay from "@/components/code/CodeDisplay.vue";
 import {User, Notification, CSSStyle, cssCategories} from "@/constants";
 import {computed, ComputedRef, inject, onMounted, Ref, ref, watch} from "vue";
 import {useRoute, useRouter} from "vue-router";

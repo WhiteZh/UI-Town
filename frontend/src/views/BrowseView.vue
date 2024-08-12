@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import {inject, onMounted, ref} from "vue";
 import NavigationBar from "@/components/NavigationBar.vue";
-import DropDown from "@/components/DropDown.vue";
-import DisplayMenu from "@/components/DisplayMenu.vue";
-import OpeningAnimation from "@/components/OpeningAnimation.vue";
+import DropDown from "@/components/browse/DropDown.vue";
+import DisplayMenu from "@/components/browse/DisplayMenu.vue";
+import OpeningAnimation from "@/components/browse/OpeningAnimation.vue";
 import {playedOA} from "@/globs";
 
 let CSS_attribute = ref([
