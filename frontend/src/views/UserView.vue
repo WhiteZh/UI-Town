@@ -1,7 +1,24 @@
 <script setup lang="ts">
+import NavigationBar from "@/components/NavigationBar.vue";
+import {onMounted} from "vue";
+import {useRouter} from "vue-router";
+import {notifications, user, playedOA} from "@/globs";
+
+let router = useRouter();
+
+onMounted(() => {
+  if (user.value === undefined) {
+    playedOA.value = true;
+    notifications.push({message: "Please login first", color: 'red'});
+    router.push('/');
+  }
+});
 </script>
 
 <template>
+  <div style="position: absolute; top: 0; width: 100%;">
+    <NavigationBar/>
+  </div>
   <div class="container">
     <div class="basic">
       <!--TODO you need to implement the actual profile picture-->

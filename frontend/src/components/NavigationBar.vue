@@ -5,7 +5,7 @@ import { RouterLink } from "vue-router";
 import {User} from "@/constants";
 import {user} from "@/globs";
 
-let openLogin = ref(false)
+let openLogin = ref(false);
 </script>
 
 <template>
@@ -20,7 +20,7 @@ let openLogin = ref(false)
     <span style="flex-grow: 1"></span>
     <a href='#' class="no-link-style navbar-option" style="background-color: #1ac8db" @click.prevent="openLogin = !openLogin" v-if="!user">Join in the Town</a>
     <div v-if="user" style="background-color: whitesmoke; align-self: center; height: 2.2rem; width: 2.2rem; position: relative; border-radius: 1.1rem; margin: 0 0.5rem;">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); cursor: pointer;" @click="() => $router.push({name: 'user'})">
         <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
       </svg>
     </div>
