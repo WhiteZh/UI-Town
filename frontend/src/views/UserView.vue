@@ -1,16 +1,27 @@
 <script setup lang="ts">
 import NavigationBar from "@/components/NavigationBar.vue";
-import {onMounted} from "vue";
+import {onMounted, ref} from "vue";
 import {useRouter} from "vue-router";
 import {notifications, user, playedOA} from "@/globs";
+import {CSSStyle} from "@/constants";
+import {getCSSByIds, getValidCSSIds} from "@/api";
+import DisplayCard from "@/components/DisplayCard.vue";
 
 let router = useRouter();
 
-onMounted(() => {
+let works = ref<CSSStyle[]>([]);
+
+onMounted(async () => {
   if (user.value === undefined) {
     playedOA.value = true;
     notifications.push({message: "Please login first", color: 'red'});
-    router.push('/');
+    await router.push('/');
+    return;
+  }
+
+  let workIDs = await getValidCSSIds({author_id: user.value.id});
+  if (workIDs.length > 0) {
+    works.value = await getCSSByIds(workIDs);
   }
 });
 
@@ -42,7 +53,7 @@ onMounted(() => {
     <div class="exhibition">
       <h1>Exhibition</h1>
       <div class="display">
-
+        <DisplayCard :id="work.id" :subscribed="0" :css="work.css" :name="work.name" :html="work.html" v-for="work in works"/>
       </div>
     </div>
   </div>
@@ -60,6 +71,7 @@ onMounted(() => {
   align-items: stretch;
   padding: 0 100px;
   color: white;
+  overflow: hidden;
 }
 
 .basic {
@@ -106,10 +118,11 @@ onMounted(() => {
 
 .exhibition {
   flex-grow: 1;
-  margin: 75px 0 75px 0;
+  margin: 75px 0 50px 0;
   display: flex;
   flex-direction: column;
   background-color: #27223055;
+  overflow: hidden;
 }
 .exhibition>h1 {
   padding: 12px;
@@ -124,7 +137,11 @@ onMounted(() => {
 .exhibition>.display {
   flex-grow: 1;
   overflow: auto;
+  scrollbar-width: none;
   display: flex;
   flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: space-between;
+  padding: 1rem;
 }
 </style>
