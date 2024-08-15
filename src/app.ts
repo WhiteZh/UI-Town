@@ -10,7 +10,7 @@ app.use(morgan('combined'));
 app.use(express.json());
 app.use(cors());
 
-app.use(express.static(path.join(__dirname, 'frontend', 'dist')));
+app.use(express.static(path.join(__dirname, '..', 'frontend', 'dist')));
 
 import cssRouter from './routers/css';
 import usersRouter from './routers/users';
@@ -23,7 +23,7 @@ app.get('*', (req, res) => {
     if (req.path.match(/^\/api/)) {
         res.status(400);
     } else {
-        res.sendFile(path.join(__dirname, 'frontend', 'dist', 'index.html'));
+        res.sendFile(path.join(__dirname, '..', 'frontend', 'dist', 'index.html'));
     }
 });
 
