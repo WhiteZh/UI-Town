@@ -61,7 +61,7 @@ export function updateUser(id: number, properties: {
     let emplace = Array(Object.keys(properties).length).fill('? = ?').join(',');
     return new Promise((resolve, reject) => {
         db.run(`UPDATE users SET ${emplace} WHERE id = ?`, [...Object.entries(properties).flat(), id], (err) => {
-            if (er !== null) {
+            if (err !== null) {
                 reject(err);
             } else {
                 resolve(true);
