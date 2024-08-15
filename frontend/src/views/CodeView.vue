@@ -12,6 +12,7 @@ const router = useRouter();
 
 const mode = computed(() => route.meta.mode) as ComputedRef<"create" | "view" | "edit">;
 const codeID = ref<number>();
+const authorID = ref<number>();
 
 const name = ref() as Ref<HTMLInputElement>;
 const type = ref() as Ref<HTMLSelectElement>;
@@ -61,6 +62,7 @@ const setup = async () => {
         if (styles.length > 0) {
           html.value = styles[0].html;
           css.value = styles[0].css;
+          authorID.value = styles[0].author_id;
         } else {
           notifications.push({message: 'Id does not exist', color: 'yellow'});
         }
@@ -100,9 +102,6 @@ watch(route, setup);
 
 <template>
   <NavBar />
-  <div style="position: absolute; right: 5rem; top: 5rem;" v-if="mode === 'view'">
-    <button @click="del">delete</button>
-  </div>
   <div class="main">
     <div class="float" v-if="mode === 'create'">
       <div>
@@ -119,7 +118,7 @@ watch(route, setup);
       </div>
     </div>
     <div style="height: 2rem;"></div>
-    <CodeDisplay style="height: 75vh; margin: 0 auto; max-width: 2000px;" v-if="html || mode === 'create'" v-model:html="html" v-model:css="css"/>
+    <CodeDisplay style="height: 75vh; margin: 0 auto; max-width: 2000px;" v-if="html || mode === 'create'" v-model:html="html" v-model:css="css" :deletion="user !== undefined && authorID !== undefined && user.id === authorID ? del : undefined"/>
   </div>
 </template>
 
