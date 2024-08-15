@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import {inject, onMounted, ref} from "vue";
 import NavigationBar from "@/components/NavigationBar.vue";
-import DropDown from "@/components/DropDown.vue";
-import DisplayMenu from "@/components/DisplayMenu.vue";
-import OpeningAnimation from "@/components/OpeningAnimation.vue";
-import {Session} from "@/constants";
+import DropDown from "@/components/browse/DropDown.vue";
+import DisplayMenu from "@/components/browse/DisplayMenu.vue";
+import OpeningAnimation from "@/components/browse/OpeningAnimation.vue";
+import {playedOA} from "@/globs";
+
 let CSS_attribute = ref([
   {name: 'Buttons', url: '/', colors: ['#8c52ff', '#ff914d']},
   {name: 'Checkboxes', url: '/', colors: ['#ff5757', '#8c52ff']},
@@ -22,9 +23,9 @@ let JS_attribute = ref([
   {name: 'Visible Chart', url: '/', colors: ['#8c52ff', '#00bf63']},
 ]);
 
-const session = inject('session') as Session;
-let displayOA = !session.playedOA;
-session.playedOA = true;
+
+let displayOA = !playedOA.value;
+playedOA.value = true;
 </script>
 
 <template>

@@ -59,10 +59,6 @@ export type Notification = {
     color?: string
 };
 
-export type Session = {
-    playedOA: boolean
-};
-
 export const cssCategories = [
     "button",
     "checkbox",

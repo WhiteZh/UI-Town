@@ -18,8 +18,8 @@ const props = defineProps<{
     </div>
     <div class="drop-down-menu" v-if="list">
       <ul>
-        <li v-for="{name, url, colors} in list!" :key="name">
-          <RouterLink class="no-link-style" :to="url" :style="{ background: `linear-gradient(90deg, ${colors.join(',')})` }">{{name}}</RouterLink>
+        <li v-for="{name, colors} in list!" :key="name">
+          <RouterLink class="no-link-style" to="/" :style="{ background: `linear-gradient(90deg, ${colors.join(',')})` }">{{name}}</RouterLink>
         </li>
       </ul>
     </div>

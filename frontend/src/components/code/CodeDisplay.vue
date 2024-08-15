@@ -10,6 +10,7 @@ import {onMounted, Ref, ref, watch} from "vue";
 const props = withDefaults(defineProps<{
   html: string,
   css: string,
+  deletion?: () => void,
 }>(), {
   html: '',
   css: '',
@@ -26,7 +27,7 @@ let iframeValue = ref(iframeContent('', ''));
 
 onMounted(() => {
   // number 12 is autocompletion
-  let setupExtensions: Extension[] = (basicSetup as Extension[]).filter((_, i) => ![12].includes(i));
+  let setupExtensions: Extension[] = (basicSetup as Extension[]).filter((_, i) => ![4, 12].includes(i));
   const htmlExtensions = [setupExtensions, oneDark, html()];
   const cssExtensions = [setupExtensions, oneDark, css()];
 
@@ -96,6 +97,8 @@ onMounted(() => {
       <div class="tabs">
         <button style="background-color: #7ed957" @click="activeTab = 'html'">HTML</button>
         <button style="background-color: #ff66c4" @click="activeTab = 'css'">CSS</button>
+        <div style="flex-grow: 1"/>
+        <button style="background-color: #550000" @click="deletion" v-if="deletion !== undefined">Delete</button>
       </div>
       <div class="codeArea" ref="htmlEditor" :style="{display: activeTab === 'html' ? 'block' : 'none'}"></div>
       <div class="codeArea" ref="cssEditor" :style="{display: activeTab === 'css' ? 'block' : 'none'}"></div>
@@ -127,7 +130,7 @@ onMounted(() => {
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
-  padding-left: 2rem;
+  padding: 0 2rem;
   gap: 1.5rem;
 }
 .tabs>button {

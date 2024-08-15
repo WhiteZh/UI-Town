@@ -6,11 +6,11 @@ import {Response} from "express";
 const router = express.Router();
 
 router.get('/login', async (req, res: Response<number | ErrRes>) => {
-    if (!req.query.password_hashed) {
+    if (req.query.password_hashed === undefined) {
         res.status(400).json({ error: "No hashed password is provided"});
         return;
     }
-    if (!req.query.email) {
+    if (req.query.email === undefined) {
         res.status(400).json({ error: "No user identification is provided"});
         return;
     }

@@ -149,6 +149,12 @@ paths:
           schema:
             $ref: '#/components/schemas/CSSCategory'
           description: select only the IDs of CSSs that belongs to category `category`
+        - name: author_id
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: select only the IDs of CSSs that belongs to author with ID `author_id`
         - name: limit
           in: query
           required: false
