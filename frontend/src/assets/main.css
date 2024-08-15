@@ -58,7 +58,7 @@ iframe {
 }
 
 .cm-gutters {
-    background-color: transparent !important;
+    background-color: #272727 !important;
     border: none !important;
 }
 
@@ -68,4 +68,9 @@ iframe {
 
 .cm-activeLine {
     background-color: transparent !important;
+}
+
+.cm-scroller {
+    scrollbar-width: thin;
+    scrollbar-color: #545454 #00000000;
 }

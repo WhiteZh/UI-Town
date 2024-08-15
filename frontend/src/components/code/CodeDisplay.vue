@@ -27,7 +27,7 @@ let iframeValue = ref(iframeContent('', ''));
 
 onMounted(() => {
   // number 12 is autocompletion
-  let setupExtensions: Extension[] = (basicSetup as Extension[]).filter((_, i) => ![12].includes(i));
+  let setupExtensions: Extension[] = (basicSetup as Extension[]).filter((_, i) => ![4, 12].includes(i));
   const htmlExtensions = [setupExtensions, oneDark, html()];
   const cssExtensions = [setupExtensions, oneDark, css()];
 
