@@ -13,6 +13,8 @@ onMounted(() => {
     router.push('/');
   }
 });
+
+
 </script>
 
 <template>
@@ -114,10 +116,15 @@ onMounted(() => {
   margin: 0;
   line-height: 2rem;
   background-color: #21325755;
+  font-family: "Cooljazz", serif;
+  letter-spacing: 0.08rem;
+  font-weight: lighter;
 }
 
 .exhibition>.display {
   flex-grow: 1;
   overflow: auto;
+  display: flex;
+  flex-wrap: wrap;
 }
 </style>
