@@ -12,7 +12,7 @@ onMounted(() => {
 
 <template>
   <Transition name="v-container">
-    <div class="container" v-if="openingExist">
+    <div class="oa-container" v-if="openingExist">
       <Transition name="v-title" appear>
         <div class="openingElement" style="top: 25vh; font-size: 30vh;" v-if="textExist">
           New design
@@ -28,7 +28,7 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.container {
+.oa-container {
   position: absolute;
   z-index: 1001;
   top: 0;

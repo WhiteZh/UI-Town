@@ -23,14 +23,10 @@ let JS_attribute = ref([
   {name: 'Visible Chart', url: '/', colors: ['#8c52ff', '#00bf63']},
 ]);
 
-
-let displayOA = !playedOA.value;
-playedOA.value = true;
 </script>
 
 <template>
   <NavigationBar/>
-  <OpeningAnimation v-if="displayOA"/>
   <div class="header">
     <h3>To Select</h3>
     <h6>Choose the code of your choice</h6>

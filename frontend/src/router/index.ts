@@ -2,15 +2,16 @@ import { createRouter, createWebHistory } from 'vue-router'
 import BrowseView from '../views/BrowseView.vue'
 import CodeView from '@/views/CodeView.vue'
 import UserView from "@/views/UserView.vue";
+import HomeView from "@/views/HomeView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/',
-      redirect: {
-        name: 'browse',
-      }
+      path: '/home',
+      alias: '/',
+      name: 'home',
+      component: HomeView,
     },
     {
       path: '/browse',
