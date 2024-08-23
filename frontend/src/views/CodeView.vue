@@ -48,7 +48,7 @@ const setup = async () => {
   switch (mode.value) {
     case 'create':
       if (!user.value) {
-        await router.push('/');
+        await router.push({name: 'browse'});
         notifications.push({
           message: 'Please login before creating new styles',
           color: 'yellow'
@@ -103,6 +103,14 @@ watch(route, setup);
 <template>
   <NavBar />
   <div class="main">
+    <div style="max-width: 2000px; margin: 0 auto;">
+      <RouterLink :to="{name: 'browse'}" class="no-link-style" style="color: black; background-color: white; padding: 0.7rem 0; display: inline-flex; width: 7rem; text-align: center; border-radius: 1rem; flex-direction: row; align-items: center; justify-content: center;">
+        <svg xmlns="http://www.w3.org/2000/svg" style="height: 1rem; margin-right: 0.2rem;" height="100%" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+        </svg>
+        <span style="margin-right: 0.15rem;">Go Back</span>
+      </RouterLink>
+    </div>
     <div class="float" v-if="mode === 'create'">
       <div>
         <label>Name</label>
@@ -117,8 +125,7 @@ watch(route, setup);
         </select>
       </div>
     </div>
-    <div style="height: 2rem;"></div>
-    <CodeDisplay style="height: 75vh; margin: 0 auto; max-width: 2000px;" v-if="html || mode === 'create'" v-model:html="html" v-model:css="css" :deletion="user !== undefined && authorID !== undefined && user.id === authorID ? del : undefined"/>
+    <CodeDisplay style="border-radius: 1rem; overflow: hidden; height: 75vh; max-width: 2000px; margin: 1rem auto 0;" v-if="html || mode === 'create'" v-model:html="html" v-model:css="css" :deletion="user !== undefined && authorID !== undefined && user.id === authorID ? del : undefined"/>
   </div>
 </template>
 
@@ -135,7 +142,7 @@ watch(route, setup);
   border-radius: 2rem;
   height: 5rem;
   max-width: 2000px;
-  margin: 0 auto;
+  margin: 1rem auto 0 auto;
   align-items: center;
   justify-content: space-between;
 }

@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import Login from "@/components/Login.vue"
 import {computed, inject, Ref, ref} from "vue";
-import { RouterLink } from "vue-router";
+import {RouterLink, useRouter} from "vue-router";
 import {User} from "@/constants";
-import {user} from "@/globs";
+import {notifications, user} from "@/globs";
 
 let openLogin = ref(false);
+
+let router = useRouter();
 </script>
 
 <template>
@@ -24,7 +26,7 @@ let openLogin = ref(false);
         <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
       </svg>
     </div>
-    <RouterLink :to="{name: 'create'}" class="no-link-style navbar-option" style="background-color: #99dfec">Create</RouterLink>
+    <RouterLink :to="user === undefined ? {} : {name: 'create'}" class="no-link-style navbar-option" style="background-color: #99dfec" @click="user === undefined ? notifications.push({message:'Please login before creating new styles', color: 'yellow'}) : null">Create</RouterLink>
   </div>
 
 </template>
