@@ -1,25 +1,42 @@
 <script setup lang="ts">
-import {RouterLink} from "vue-router";
+import {RouterLink, useRouter} from "vue-router";
+import {CSSCategory} from "@/constants";
+
+type URL = string | {
+  name: string,
+  params?: {
+    content_type?: 'css' | 'js',
+    category?: CSSCategory,
+  }
+};
 
 const props = defineProps<{
   list?: {
     name: string,
-    url: string,
+    url: URL,
     colors: string[],
-  }[]
+  }[],
+  self_url?: URL,
 }>();
 
+const router = useRouter();
+
+const gotoSelfURL = () => {
+  if (props.self_url !== undefined) {
+    router.push(props.self_url);
+  }
+}
 </script>
 
 <template>
   <div class="drop-down-container">
-    <div class="drop-down-btn">
+    <div class="drop-down-btn" @click="gotoSelfURL">
       <slot/>
     </div>
     <div class="drop-down-menu" v-if="list">
       <ul>
-        <li v-for="{name, colors} in list!" :key="name">
-          <RouterLink class="no-link-style" to="/" :style="{ background: `linear-gradient(90deg, ${colors.join(',')})` }">{{name}}</RouterLink>
+        <li v-for="{name, colors, url} in list" :key="name">
+          <RouterLink class="no-link-style" :to="url" :style="{ background: `linear-gradient(90deg, ${colors.join(',')})` }">{{name}}</RouterLink>
         </li>
       </ul>
     </div>

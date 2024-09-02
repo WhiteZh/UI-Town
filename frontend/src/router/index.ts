@@ -14,7 +14,7 @@ const router = createRouter({
       component: HomeView,
     },
     {
-      path: '/browse',
+      path: '/browse/:content_type?/:category?',
       name: 'browse',
       component: BrowseView
     },
