@@ -40,6 +40,10 @@ export async function getValidCSSIds(options?: {
 }
 
 export async function getCSSByIds(ids: number[]): Promise<CSSStyle[]> {
+    if (ids.length === 0) {
+        return [];
+    }
+
     let res = await fetch(`/api/css?${ids.map(e => `id=${e}`).join('&')}`, {
         method: 'GET',
         headers: {
