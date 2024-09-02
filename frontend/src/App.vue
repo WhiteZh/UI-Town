@@ -12,7 +12,7 @@ import {notifications} from "@/globs";
       </svg>
     </div>
   </div>
-  <RouterView />
+  <RouterView :key="$route.fullPath"/>
 </template>
 
 

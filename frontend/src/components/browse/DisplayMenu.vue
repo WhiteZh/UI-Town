@@ -14,10 +14,10 @@ const list: Ref<CSSStyle[]> = ref([]);
 
 onMounted(async function() {
   try {
-    let ids = await getValidCSSIds();
-    if (ids.length > 0) {
-      list.value = await getCSSByIds(ids);
-    }
+    let ids = await getValidCSSIds({
+      category: props.category
+    });
+    list.value = await getCSSByIds(ids);
   } catch (e) {
     notifications.push({message: String(e), color: 'red'});
     console.log(e);

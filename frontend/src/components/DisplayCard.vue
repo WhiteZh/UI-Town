@@ -64,6 +64,7 @@ onMounted(() => {
 .card-frame {
   flex-grow: 1;
   position: relative;
+  overflow: hidden;
 }
 
 .card-content-root {

@@ -20,30 +20,8 @@ const type = ref() as Ref<HTMLSelectElement>;
 const html = ref('');
 const css = ref('');
 
-async function submit() {
-  console.log(user);
-  if (!user.value) {
-    notifications.push({message: 'Not logged in', color: 'yellow'});
-    return;
-  }
-  try {
-    await createCSSStyle(
-        user.value.id,
-        user.value.password_hashed,
-        name.value.value,
-        type.value.value,
-        html.value,
-        css.value
-    );
-    notifications.push({message: 'Successfully created a new style'});
-  } catch (e) {
-    console.log(e);
-    notifications.push({message: `Upload failed: ${String(e)}`, color: 'yellow'});
-  }
-}
 
-
-const setup = async () => {
+onMounted(async () => {
   console.log(mode.value);
   switch (mode.value) {
     case 'create':
@@ -76,7 +54,31 @@ const setup = async () => {
     default:
       notifications.push({message: 'Unexpected behavior (unexpected mode for CodeView)', color: 'purple'});
   }
+});
+
+
+async function submit() {
+  console.log(user);
+  if (!user.value) {
+    notifications.push({message: 'Not logged in', color: 'yellow'});
+    return;
+  }
+  try {
+    await createCSSStyle(
+        user.value.id,
+        user.value.password_hashed,
+        name.value.value,
+        type.value.value,
+        html.value,
+        css.value
+    );
+    notifications.push({message: 'Successfully created a new style'});
+  } catch (e) {
+    console.log(e);
+    notifications.push({message: `Upload failed: ${String(e)}`, color: 'yellow'});
+  }
 }
+
 
 const del = async () => {
   if (!user.value) {
@@ -95,9 +97,6 @@ const del = async () => {
     console.log(e);
   }
 }
-
-onMounted(setup);
-watch(route, setup);
 </script>
 
 <template>
