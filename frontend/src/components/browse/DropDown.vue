@@ -17,6 +17,7 @@ const props = defineProps<{
     colors: string[],
   }[],
   self_url?: URL,
+  extendWidth?: string,
 }>();
 
 const router = useRouter();
@@ -29,14 +30,14 @@ const gotoSelfURL = () => {
 </script>
 
 <template>
-  <div class="drop-down-container">
-    <div class="drop-down-btn" @click="gotoSelfURL">
+  <div class="relative group">
+    <div class="text-lg py-2 px-4 w-full inline-block cursor-pointer font-bold text-white text-left rounded-full group-hover:bg-[#272030]" @click="gotoSelfURL">
       <slot/>
     </div>
-    <div class="drop-down-menu" v-if="list">
-      <ul>
-        <li v-for="{name, colors, url} in list" :key="name">
-          <RouterLink class="no-link-style" :to="url" :style="{ background: `linear-gradient(90deg, ${colors.join(',')})` }">{{name}}</RouterLink>
+    <div class="group-hover:inline-block absolute hidden ps-2 group" v-if="list">
+      <ul class="bg-[#272030] rounded-2xl py-0.5 px-2" :style="{width: extendWidth}">
+        <li v-for="{name, colors, url} in list" class="my-3 text-white list-none hover:underline" :key="name">
+          <RouterLink class="leading-tight text-white text-sm font-thin text-center block py-2 px-4 rounded-full" :to="url" :style="{ background: `linear-gradient(90deg, ${colors.join(',')})` }">{{name}}</RouterLink>
         </li>
       </ul>
     </div>
@@ -44,64 +45,4 @@ const gotoSelfURL = () => {
 </template>
 
 <style scoped>
-.drop-down-container {
-  position: relative;
-}
-
-.drop-down-btn {
-  padding: 0.5rem 1rem;
-  margin: 0;
-  width: 7rem;
-  display: inline-block;
-  cursor: pointer;
-  font-size: 1rem;
-  font-weight: bold;
-  color: white;
-  text-align: left;
-  border-radius: 2rem;
-}
-
-.drop-down-container:hover .drop-down-btn {
-  background-color: #272030;
-}
-
-.drop-down-container:hover .drop-down-menu {
-  display: inline-block;
-}
-
-.drop-down-menu {
-  position: absolute;
-  display: none;
-  margin: 0;
-  padding-left: 0.5rem;
-}
-
-.drop-down-menu ul {
-  width: 8rem;
-  background-color: #272030;
-  border-radius: 1.1rem;
-  margin: 0;
-  padding: 0.1rem 0.5rem;
-}
-
-.drop-down-menu li {
-  margin: 0.8rem 0;
-  padding: 0;
-  color: white;
-  list-style: none;
-}
-
-.drop-down-menu li:hover {
-  text-decoration-line: underline;
-}
-
-.drop-down-menu li>* {
-  color: white;
-  font-size: 0.8rem;
-  text-align: center;
-  display: block;
-  padding: 0.5rem 1rem;
-  border-radius: 2rem;
-}
-
 </style>

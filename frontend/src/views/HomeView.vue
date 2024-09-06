@@ -12,72 +12,22 @@ playedOA.value = true;
 <template>
   <OpeningAnimation v-if="displayOA"/>
   <NavigationBar/>
-  <div class="container">
-    <div class="house-of-ui-img"></div>
-    <div class="uihouse-side">
-      <h5>HI I'M UI-TOWN</h5>
-      <h1>A town of UI which brings your design to life.</h1>
-      <h4>"At UI-town, we offer a vast array of CSS and JS animations to elevate your web projects. Our dynamic animations and interactive effects make your user interfaces not just functional but truly captivating."</h4>
-      <RouterLink :to="{name: 'browse'}" class="no-link-style router-link">Enter</RouterLink>
+  <div class="mx-auto mt-32 max-w-screen-2xl px-5 flex flex-row text-white">
+    <div id="house-of-ui-img" class="lg:block hidden"></div>
+    <div class="max-w-[48rem] px-10">
+      <h5 class="font-thin tracking-widest mt-12 text-sm">HI I'M UI-TOWN</h5>
+      <h1 class="font-thin text-7xl text-left text-[#D0C3F1] mt-16">A town of UI which brings your design to life.</h1>
+      <h4 class="tracking-widest leading-9 text-lg max-w-lg ps-1.5 font-[Cooljazz] mt-16">"At UI-town, we offer a vast array of CSS and JS animations to elevate your web projects. Our dynamic animations and interactive effects make your user interfaces not just functional but truly captivating."</h4>
+      <RouterLink :to="{name: 'browse'}" class="ms-0.5 w-40 mt-8 py-4 text-center rounded-full inline-block bg-[#D0C3F1] text-[rgb(85,26,139)] hover:text-white">Enter</RouterLink>
     </div>
   </div>
 </template>
 
 <style scoped>
-.container {
-  margin: 8rem auto 0 auto;
-  max-width: 1550px;
-  min-width: 945px;
-  padding: 0 20px;
-  display: flex;
-  flex-direction: row;
-  color: white;
-}
-
-.house-of-ui-img {
-  height: 45rem;
+#house-of-ui-img {
+  @apply h-[45rem] rounded-2xl flex-grow min-w-[490px];
   background: url("@/assets/house_of_ui.png") no-repeat;
   background-size: auto 100%;
   background-position-x: center;
-  border-radius: 15px;
-  flex-grow: 1;
-  min-width: 490px;
-}
-
-.uihouse-side {
-  max-width: 48rem;
-  padding: 0 2.5rem 0 2.5rem;
-}
-.uihouse-side>h5 {
-  font-weight: lighter;
-  letter-spacing: 0.1rem;
-  margin-top: 3rem;
-}
-.uihouse-side>h1 {
-  font-weight: lighter;
-  font-size: 4.5rem;
-  text-align: left;
-  color: #D0C3F1;
-}
-.uihouse-side>h4 {
-  font-weight: lighter;
-  letter-spacing: 0.1rem;
-  line-height: 2.2rem;
-  font-size: 1.2rem;
-  max-width: 30rem;
-  padding-left: 5px;
-  font-family: "Cooljazz", serif;
-}
-.uihouse-side>.router-link {
-  width: 10rem;
-  margin-top: 0.5rem;
-  padding: 1rem 0;
-  text-align: center;
-  border-radius: 2rem;
-  display: inline-block;
-  background-color: #D0C3F1;
-}
-.uihouse-side>.router-link:hover {
-  color: white;
 }
 </style>

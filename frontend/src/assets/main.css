@@ -1,31 +1,9 @@
-body {
-    margin: 0;
-}
-
-* {
-    box-sizing: border-box;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 #app {
-    font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, black, #737373);
-    min-height: 100vh;
-    max-height: 100vh;
-    overflow: auto;
-    scrollbar-width: none;
-}
-
-.no-link-style {
-    text-decoration: none;
-}
-
-.input {
-    border: none;
-    outline: none;
-}
-
-iframe {
-    border: none;
+    @apply font-[Arial] bg-[linear-gradient(135deg,black,#737373)] min-h-screen max-h-screen overflow-auto [scrollbar-width:none];
 }
 
 @font-face {

@@ -90,67 +90,21 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="container">
-    <iframe class="iframe" :srcdoc="iframeValue">
+  <div class="flex flex-row">
+    <iframe class="w-1/2" :srcdoc="iframeValue">
     </iframe>
-    <div class="code">
-      <div class="tabs">
-        <button style="background-color: #7ed957" @click="activeTab = 'html'">HTML</button>
-        <button style="background-color: #ff66c4" @click="activeTab = 'css'">CSS</button>
+    <div class="w-1/2 flex flex-col">
+      <div class="min-h-20 max-h-20 bg-[#545454] flex flex-row justify-start items-center px-8 gap-6 text-white text-[1.2rem] font-[Cooljazz] italic tracking-[0.3rem]">
+        <button class="w-32 h-16 rounded-full cursor-pointer bg-[#7ed957]" @click="activeTab = 'html'">HTML</button>
+        <button class="w-32 h-16 rounded-full cursor-pointer bg-[#ff66c4]" @click="activeTab = 'css'">CSS</button>
         <div style="flex-grow: 1"/>
-        <button style="background-color: #550000" @click="deletion" v-if="deletion !== undefined">Delete</button>
+        <button class="w-32 h-16 rounded-full cursor-pointer bg-[#550000]" @click="deletion" v-if="deletion !== undefined">Delete</button>
       </div>
-      <div class="codeArea" ref="htmlEditor" :style="{display: activeTab === 'html' ? 'block' : 'none'}"></div>
-      <div class="codeArea" ref="cssEditor" :style="{display: activeTab === 'css' ? 'block' : 'none'}"></div>
+      <div class="flex-grow bg-[#272727] pt-1 overflow-scroll" ref="htmlEditor" :style="{display: activeTab === 'html' ? 'block' : 'none'}"></div>
+      <div class="flex-grow bg-[#272727] pt-1 overflow-scroll" ref="cssEditor" :style="{display: activeTab === 'css' ? 'block' : 'none'}"></div>
     </div>
   </div>
 </template>
 
 <style scoped>
-.container {
-  display: flex;
-  flex-direction: row;
-}
-
-.iframe {
-  width: 50%;
-}
-
-.code {
-  width: 50%;
-  display: flex;
-  flex-direction: column;
-}
-
-.tabs {
-  min-height: 5rem;
-  max-height: 5rem;
-  background-color: #545454;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  padding: 0 2rem;
-  gap: 1.5rem;
-}
-.tabs>button {
-  width: 8rem;
-  height: 4rem;
-  border-radius: 2rem;
-  border: none;
-  outline: none;
-  font-size: 1.2rem;
-  color: white;
-  font-family: "Cooljazz", serif;
-  font-style: italic;
-  letter-spacing: 0.3rem;
-  cursor: pointer;
-}
-
-.codeArea {
-  flex-grow: 1;
-  background-color: #272727;
-  padding-top: 0.2rem;
-  overflow: auto;
-}
 </style>
