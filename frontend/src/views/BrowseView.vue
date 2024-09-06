@@ -58,57 +58,20 @@ let JS_attribute = ref([
 
 <template>
   <NavigationBar/>
-  <div class="header">
-    <h3>To Select</h3>
-    <h6>Choose the code of your choice</h6>
+  <div class="py-0 px-60 text-[#D0C3F1]">
+    <h3 class="text-2xl mt-7 mb-1.5 mx-0 font-bold">To Select</h3>
+    <h6 class="font-[Cooljazz] tracking-[0.2rem] font-thin italic indent-8 my-3 mx-0 text-xs">Choose the code of your choice</h6>
   </div>
-  <div class="main">
-    <div class="left-nav">
+  <div class="flex flex-row flex-grow">
+    <div class="pe-36 flex flex-col ms-5 items-stretch">
       <DropDown :self_url="{name: 'browse'}">All</DropDown>
       <DropDown :list="CSS_attribute" :self_url="{name: 'browse', params: {content_type: 'css'}}">CSS</DropDown>
       <DropDown :list="JS_attribute" :self_url="{name: 'browse'}">JavaScript</DropDown>
     </div>
-    <DisplayMenu :contentType="contentType" :category="category"/>
+    <DisplayMenu :contentType="contentType" :category="category" class="pe-20"/>
   </div>
 
 </template>
 
 <style scoped>
-
-.main {
-  display: flex;
-  flex-direction: row;
-  flex-grow: 1;
-}
-
-.header {
-  padding: 0 14.6rem;
-}
-
-.header>h3 {
-  font-size: 1.5rem;
-  color: #D0C3F1;
-  margin: 1.5rem 0 1rem 0;
-}
-
-.header>h6 {
-  color: #D0C3F1;
-  letter-spacing: 0.2rem;
-  font-family: Cooljazz, sans-serif;
-  font-weight: lighter;
-  font-style: italic;
-  text-indent: 2rem;
-  margin: 1rem 0;
-  font-size: 0.7rem;
-}
-
-.left-nav {
-  min-width: 20rem;
-  display: flex;
-  flex-direction: column;
-  margin-left: 1rem;
-  align-items: start;
-}
-
-
 </style>

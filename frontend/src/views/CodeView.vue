@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import NavBar from "@/components/NavigationBar.vue"
+import NavigationBar from "@/components/NavigationBar.vue"
 import CodeDisplay from "@/components/code/CodeDisplay.vue";
 import {User, Notification, CSSStyle, cssCategories} from "@/constants";
 import {computed, ComputedRef, inject, onMounted, Ref, ref, watch} from "vue";
@@ -100,71 +100,31 @@ const del = async () => {
 </script>
 
 <template>
-  <NavBar />
-  <div class="main">
-    <div style="max-width: 2000px; margin: 0 auto;">
-      <RouterLink :to="{name: 'browse'}" class="no-link-style" style="color: black; background-color: white; padding: 0.7rem 0; display: inline-flex; width: 7rem; text-align: center; border-radius: 1rem; flex-direction: row; align-items: center; justify-content: center;">
-        <svg xmlns="http://www.w3.org/2000/svg" style="height: 1rem; margin-right: 0.2rem;" height="100%" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
-          <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
-        </svg>
-        <span style="margin-right: 0.15rem;">Go Back</span>
-      </RouterLink>
-    </div>
-    <div class="float" v-if="mode === 'create'">
+  <NavigationBar />
+  <div class="m-8 mx-auto max-w-screen-2xl px-3">
+    <RouterLink :to="{name: 'browse'}" class="text-black bg-white py-3 inline-flex w-28 text-center rounded-full flex-row items-center justify-center">
+      <svg xmlns="http://www.w3.org/2000/svg" height="100%" fill="currentColor" class="bi bi-arrow-left  h-4 me-1" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+      </svg>
+      <span class="me-0.5">Go Back</span>
+    </RouterLink>
+    <div class="bg-[#2b2a28] flex flex-row px-20 h-20 rounded-full mt-4 items-center justify-between text-[1.2rem] -mx-0.5" v-if="mode === 'create'">
       <div>
-        <label>Name</label>
-        <input class="input" ref="name"/>
+        <label class="text-white me-8 font-bold">Name</label>
+        <input class="h-12 rounded-full py-2 px-3" ref="name"/>
       </div>
-      <div class="submit-btn" @click="submit()">submit</div>
+      <div class="bg-[#1ac8db] p-4 rounded-full text-white cursor-pointer" @click="submit()">submit</div>
       <div>
-        <label>Type</label>
-        <select class="input" ref="type">
+        <label class="text-[1.2rem] text-white me-8 font-bold">Type</label>
+        <select class="h-12 rounded-full py-2 px-3" ref="type">
           <option>---</option>
           <option v-for="cate in cssCategories">{{cate}}</option>
         </select>
       </div>
     </div>
-    <CodeDisplay style="border-radius: 1rem; overflow: hidden; height: 75vh; max-width: 2000px; margin: 1rem auto 0;" v-if="html || mode === 'create'" v-model:html="html" v-model:css="css" :deletion="user !== undefined && authorID !== undefined && user.id === authorID ? del : undefined"/>
+    <CodeDisplay class="rounded-2xl overflow-hidden h-[70svh] mt-4 mx-auto" v-if="html || mode === 'create'" v-model:html="html" v-model:css="css" :deletion="user !== undefined && authorID !== undefined && user.id === authorID ? del : undefined"/>
   </div>
 </template>
 
 <style scoped>
-.main {
-  padding: 2rem;
-}
-
-.float {
-  background-color: #2b2a28;
-  display: flex;
-  flex-direction: row;
-  padding: 0 5rem;
-  border-radius: 2rem;
-  height: 5rem;
-  max-width: 2000px;
-  margin: 1rem auto 0 auto;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.float>div>label {
-  font-size: 1.2rem;
-  color: white;
-  margin: 0 2rem 0 0;
-  font-weight: bold;
-}
-.float>div>input, .float>div>select {
-  height: 3rem;
-  border-radius: 1.5rem;
-  font-size: 1.2rem;
-  padding: 0.5rem 1.3rem;
-}
-
-.submit-btn {
-  font-size: 1.2rem;
-  background-color: #1ac8db;
-  padding: 1rem;
-  border-radius: 1.5rem;
-  color: white;
-  cursor: pointer;
-}
 </style>

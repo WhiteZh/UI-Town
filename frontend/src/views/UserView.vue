@@ -6,6 +6,7 @@ import {notifications, user, playedOA} from "@/globs";
 import {CSSStyle} from "@/constants";
 import {getCSSByIds, getValidCSSIds} from "@/api";
 import DisplayCard from "@/components/DisplayCard.vue";
+import DisplayMenu from "@/components/browse/DisplayMenu.vue";
 
 let router = useRouter();
 
@@ -29,119 +30,33 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div style="position: absolute; top: 0; width: 100%;">
+  <div class="absolute top-0 w-full">
     <NavigationBar/>
   </div>
-  <div class="container">
-    <div class="basic">
+  <div class="max-w-screen-lg bg-[linear-gradient(90deg,#004aad55,#cb6ce655)] h-screen mx-auto flex flex-col justify-start items-stretch lg:px-28 px-5 text-white overflow-scroll">
+    <div class="mt-20 flex w-full">
       <!--TODO you need to implement the actual profile picture-->
-      <svg xmlns="http://www.w3.org/2000/svg" height="100%" fill="currentColor" class="bi bi-person-fill picon" viewBox="0 0 16 16">
+      <svg xmlns="http://www.w3.org/2000/svg" height="100%" fill="currentColor" class="bi bi-person-fill aspect-square h-32 flex-shrink-0 border border-white" viewBox="0 0 16 16">
         <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
       </svg>
 
-      <div class="info">
-        <h1>Name</h1>
-        <p>
+      <div class="px-5 flex flex-col justify-start">
+        <h1 class="leading-8 text-3xl font-bold">Name</h1>
+        <p class="w-full mt-2 ms-0.5 overflow-scroll overflow-ellipsis max-h-20 [scrollbar-width:none] leading-tight">
           The quick brown fox jumps over the lazy dog. Pack my box with five dozen liquor jugs. How razorback-jumping frogs can level six piqued gymnasts! Grumpy wizards make toxic brew for the evil queen and jack. Jived fox nymph grabs quick waltz. Cozy lummox gives smart squid who asks for job pen.
         </p>
       </div>
 
-      <div class="lvl">
-        <span>1</span>级
+      <div class="flex-shrink-0 text-2xl">
+        lvl.<span class="min-w-8 inline-block text-center">1</span>
       </div>
     </div>
-    <div class="exhibition">
-      <h1>Exhibition</h1>
-      <div class="display">
-        <DisplayCard :id="work.id" :subscribed="0" :css="work.css" :name="work.name" :html="work.html" v-for="work in works"/>
-      </div>
+    <div class="flex-grow mt-16 mb-8 flex flex-col bg-[#27223055] overflow-hidden">
+      <h1 class="p-3 text-3xl leading-8 bg-[#21325755] font-[Cooljazz] tracking-widest font-extralight">Exhibition</h1>
+      <DisplayMenu :hasSearcher="false" class="px-6 py-6"/>
     </div>
   </div>
 </template>
 
 <style scoped>
-.container {
-  max-width: 1000px;
-  background: linear-gradient(90deg, #004aad55, #cb6ce655);
-  height: 100vh;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: start;
-  align-items: stretch;
-  padding: 0 100px;
-  color: white;
-  overflow: hidden;
-}
-
-.basic {
-  margin-top: 100px;
-  display: flex;
-}
-
-.basic .picon {
-  aspect-ratio: 1 / 1;
-  height: 8rem;
-  flex-shrink: 0;
-  border: white 1px solid;
-}
-
-.basic>.info {
-  padding: 0 20px;
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: start;
-}
-
-.basic>.info>h1 {
-  padding: 0;
-  margin: 0;
-  line-height: 2rem;
-}
-.basic>.info>p {
-  margin: 10px 0 0 .25rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  flex-grow: 1;
-}
-
-.basic>.lvl {
-  flex-shrink: 0;
-  font-size: 2rem;
-}
-.basic>.lvl>span {
-  min-width: 2rem;
-  display: inline-block;
-  text-align: center;
-}
-
-.exhibition {
-  flex-grow: 1;
-  margin: 75px 0 50px 0;
-  display: flex;
-  flex-direction: column;
-  background-color: #27223055;
-  overflow: hidden;
-}
-.exhibition>h1 {
-  padding: 12px;
-  margin: 0;
-  line-height: 2rem;
-  background-color: #21325755;
-  font-family: "Cooljazz", serif;
-  letter-spacing: 0.08rem;
-  font-weight: lighter;
-}
-
-.exhibition>.display {
-  flex-grow: 1;
-  overflow: auto;
-  scrollbar-width: none;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  justify-content: space-between;
-  padding: 1rem;
-}
 </style>
