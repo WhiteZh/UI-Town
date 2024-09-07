@@ -2,7 +2,7 @@
 import {ref} from "vue";
 import NavigationBar from "@/components/NavigationBar.vue";
 import DropDown from "@/components/browse/DropDown.vue";
-import DisplayMenu from "@/components/browse/DisplayMenu.vue";
+import DisplayMenu from "@/components/DisplayMenu.vue";
 import {useRoute, useRouter} from "vue-router";
 import {cssCategories, CSSCategory} from "@/constants";
 import {notifications} from "@/globs";

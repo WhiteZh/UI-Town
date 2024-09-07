@@ -6,7 +6,7 @@ import {notifications, user, playedOA} from "@/globs";
 import {CSSStyle} from "@/constants";
 import {getCSSByIds, getValidCSSIds} from "@/api";
 import DisplayCard from "@/components/DisplayCard.vue";
-import DisplayMenu from "@/components/browse/DisplayMenu.vue";
+import DisplayMenu from "@/components/DisplayMenu.vue";
 
 let router = useRouter();
 
