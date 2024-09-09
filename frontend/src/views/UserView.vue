@@ -33,7 +33,7 @@ onMounted(async () => {
   <div class="absolute top-0 w-full">
     <NavigationBar/>
   </div>
-  <div class="max-w-screen-lg bg-[linear-gradient(90deg,#004aad55,#cb6ce655)] h-screen mx-auto flex flex-col justify-start items-stretch lg:px-28 px-5 text-white overflow-scroll">
+  <div v-if="user !== undefined" class="max-w-screen-lg bg-[linear-gradient(90deg,#004aad55,#cb6ce655)] h-screen mx-auto flex flex-col justify-start items-stretch lg:px-28 px-5 text-white overflow-scroll">
     <div class="mt-20 flex w-full">
       <!--TODO you need to implement the actual profile picture-->
       <svg xmlns="http://www.w3.org/2000/svg" height="100%" fill="currentColor" class="bi bi-person-fill aspect-square h-32 flex-shrink-0 border border-white" viewBox="0 0 16 16">
