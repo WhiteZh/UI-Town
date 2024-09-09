@@ -192,6 +192,41 @@ paths:
                   description: IDs
         '400':
           $ref: '#/components/responses/400'
+  /api/users:
+    get:
+      summary: Fetch User Information
+      description: |
+        fetch user information based on id
+        password_hashed is required
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: password_hashed
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  email:
+                    type: string
+                  password_hashed:
+                    type: string
+        '400':
+          $ref: '#/components/responses/400'
   /api/users/login:
     get:
       summary: Validate User Password

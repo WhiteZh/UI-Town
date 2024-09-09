@@ -1,5 +1,5 @@
 import express from "express";
-import {getUserByEmail} from '../controllers/user';
+import {getUserByEmail, getUserByID, User} from '../controllers/user';
 import {ErrRes, newErrRes} from "./util";
 import {Response} from "express";
 
@@ -24,6 +24,30 @@ router.get('/login', async (req, res: Response<number | ErrRes>) => {
         res.json(user ? user.id : -1);
     } catch (e) {
         res.status(400).json({error: newErrRes(e)});
+    }
+});
+
+router.get('/', async (req, res: Response<User | ErrRes>) => {
+    if (req.query.id === undefined || req.query.password_hashed === undefined) {
+        res.status(400).json({ error: "Required query parameters not provided" });
+        return;
+    }
+
+    let id: number = parseInt((Array.isArray(req.query.id) ? req.query.id[0] : req.query.id) as string);
+    let password_hashed: string = (Array.isArray(req.query.password_hashed) ? req.query.password_hashed[0] : req.query.password_hashed) as string;
+
+    try {
+        let user = await getUserByID(id);
+        if (user.password_hashed === password_hashed) {
+            res.json(user);
+            return;
+        } else {
+            res.json({ error: "Authentication failed" });
+            return;
+        }
+    } catch (e) {
+        res.status(400).json({ error: String(e) });
+        return;
     }
 });
 
