@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {ref, inject, onMounted, Ref} from "vue";
 import {sha256} from "js-sha256";
-import {getUserIdByLoginInfo} from "@/api";
+import {getUserById, getUserIdByLoginInfo} from "@/api";
 import {notifications, user} from "@/globs";
 
 const emailInput = ref() as Ref<HTMLInputElement>;
@@ -24,11 +24,7 @@ const login = async () => {
     emits('login', false);
   }
   if (userId) {
-    user.value = {
-      id: userId,
-      email: email,
-      password_hashed: password_hashed,
-    };
+    user.value = await getUserById(userId, password_hashed);
     notifications.push({message: 'Successfully logged in'});
     emits('login', true);
   } else {

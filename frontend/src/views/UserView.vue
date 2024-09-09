@@ -41,7 +41,7 @@ onMounted(async () => {
       </svg>
 
       <div class="px-5 flex flex-col justify-start">
-        <h1 class="leading-8 text-3xl font-bold">Name</h1>
+        <h1 class="leading-8 text-3xl font-bold">{{user.name}}</h1>
         <p class="w-full mt-2 ms-0.5 overflow-scroll overflow-ellipsis max-h-20 [scrollbar-width:none] leading-tight">
           The quick brown fox jumps over the lazy dog. Pack my box with five dozen liquor jugs. How razorback-jumping frogs can level six piqued gymnasts! Grumpy wizards make toxic brew for the evil queen and jack. Jived fox nymph grabs quick waltz. Cozy lummox gives smart squid who asks for job pen.
         </p>

@@ -50,6 +50,7 @@ export const shadowContent = (html: string, css: string) => `
 
 export type User = {
     id: number,
+    name: string,
     email: string,
     password_hashed: string,
 };

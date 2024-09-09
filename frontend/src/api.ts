@@ -56,6 +56,21 @@ export async function getCSSByIds(ids: number[]): Promise<CSSStyle[]> {
     return await res.json() as CSSStyle[];
 }
 
+export async function getUserById(id: number, password_hashed: string): Promise<User> {
+    let res = await fetch(`/api/users?id=${id}&password_hashed=${password_hashed}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    });
+
+    if (!res.ok) {
+        throw Error((await res.json() as {error: string}).error);
+    } else {
+        return await res.json() as User;
+    }
+}
+
 export async function getUserIdByLoginInfo(email: string, password_hashed: string): Promise<number|undefined> {
     let res = await fetch(`/api/users/login?email=${email}&password_hashed=${password_hashed}`, {
         method: 'GET',
