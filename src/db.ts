@@ -7,6 +7,7 @@ const sqlite3 = verbose();
 const db = new sqlite3.Database(path.join(__dirname, '../db/database.sqlite'), (err: Error|null) => {
     if (err) {
         console.error(err.message);
+        throw err;
     } else {
         console.log('Connected to the SQLite database.');
     }
@@ -19,10 +20,10 @@ if (fs.existsSync(version_path)) {
     db_version = parseInt(fs.readFileSync(version_path).toString());
 }
 
-fs.readdir(path.join(__dirname, '../db/db_inits'), (err: Error|null, files: string[]) => {
+fs.readdir(path.join(__dirname, '../db/db_inits'), async (err: Error|null, files: string[]) => {
     if (err) {
         console.error(err.message);
-        return;
+        throw err;
     }
 
     files = files.filter(name => name.match(/^[0-9]+\.sql$/));
@@ -34,41 +35,40 @@ fs.readdir(path.join(__dirname, '../db/db_inits'), (err: Error|null, files: stri
     files = files.sort((a, b) => parseInt(a.match(/^[0-9]+/)![0]) - parseInt(b.match(/^[0-9]+/)![0]));
     db_version = parseInt(files[files.length-1].match(/^[0-9]+/)![0]);
     console.log(files);
-    let cnt = files.length;
-    for (let i = 0; i < files.length; i++) {
-        fs.readFile(path.join(__dirname, `../db/db_inits/${files[i]}`), (err, data) => {
-            if (err) {
-                console.error(err.message);
-                return;
-            }
 
-            files[i] = data.toString();
-            cnt--;
-            if (cnt === 0) {
-                db.serialize(() => {
-                    let cnt = files.length;
-                    for (let command of files) {
-                        console.log(command);
-                        db.exec(command, (err: Error|null) => {
-                            if (err) {
-                                console.error(err.message);
-                            }
-
-                            cnt--;
-                            if (cnt === 0) {
-                                console.log('Initialized database.');
-                                fs.writeFile(version_path, db_version.toString(), err => {
-                                    if (err) {
-                                        console.error(err.message);
-                                    }
-                                });
-                            }
-                        });
-                    }
-                });
-            }
+    let commands: string[] = [];
+    for (let i in files) {
+        commands[i] = await new Promise<string>((resolve, reject) => {
+            fs.readFile(path.join(__dirname, '..', 'db', 'db_inits', files[i]), (err, data) => {
+                if (err) {
+                    reject(err)
+                } else {
+                    resolve(data.toString());
+                }
+            });
         });
     }
+
+    for (let i in commands) {
+        console.log(commands[i]);
+        await new Promise<void>((resolve, reject) => db.exec(commands[i], (err: Error|null) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve();
+            }
+        }));
+        console.log(`Successfully committed: ${files[i]}`);
+        await new Promise<void>((resolve, reject) => fs.writeFile(version_path, files[i].match(/^[0-9]+/)![0], err => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve();
+            }
+        }));
+    }
+
+    console.log('Initialized database.');
 });
 
 
