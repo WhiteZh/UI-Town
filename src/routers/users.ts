@@ -1,5 +1,5 @@
 import express from "express";
-import {getUserByEmail, getUserByID, User} from '../controllers/user';
+import {getUserByEmail, getUserByID, updateUser, User} from '../controllers/user';
 import {ErrRes, newErrRes} from "./util";
 import {Response} from "express";
 
@@ -48,6 +48,44 @@ router.get('/', async (req, res: Response<User | ErrRes>) => {
     } catch (e) {
         res.status(400).json({ error: String(e) });
         return;
+    }
+});
+
+router.patch('/', async (req, res: Response<void | ErrRes>) => {
+    const isValidBody = (body: any): body is {
+        id: number,
+        password_hashed: string,
+        name?: string,
+        email?: string,
+        new_password_hashed?: string,
+        description?: string,
+        icon?: string,
+    } => typeof body === 'object' && body.id !== undefined && typeof body.id === 'number' &&
+        body.password_hashed !== undefined && typeof body.password_hashed === 'string'
+
+    let body = req.body;
+    if (!isValidBody(body)) {
+        res.status(400).json({ error: "Bad request" });
+        return;
+    }
+
+    let user = await getUserByID(body.id);
+    if (user.password_hashed !== body.password_hashed) {
+        res.status(400).json({ error: "Authentication failed" });
+        return;
+    }
+
+    try {
+        await updateUser(body.id, {
+            name: body.name,
+            email: body.email,
+            password_hashed: body.new_password_hashed,
+            description: body.description,
+            icon: body.icon? Buffer.from(body.icon, 'base64') : undefined,
+        });
+        res.status(200).send();
+    } catch (e) {
+        res.status(400).json({ error: String(e) });
     }
 });
 

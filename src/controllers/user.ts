@@ -1,4 +1,5 @@
 import db from '../db';
+import {deleteUndefinedFields} from "../routers/util";
 
 
 export type User = {
@@ -57,10 +58,13 @@ export function updateUser(id: number, properties: {
     name?: string,
     email?: string,
     password_hashed?: string,
+    description?: string,
+    icon?: Buffer,
 }): Promise<boolean> {
-    let emplace = Array(Object.keys(properties).length).fill('? = ?').join(',');
+    deleteUndefinedFields(properties);
+    let emplace = Object.keys(properties).map(v => `${v} = ?`).join(',');
     return new Promise((resolve, reject) => {
-        db.run(`UPDATE users SET ${emplace} WHERE id = ?`, [...Object.entries(properties).flat(), id], (err) => {
+        db.run(`UPDATE users SET ${emplace} WHERE id = ?`, [...Object.values(properties), id], (err) => {
             if (err !== null) {
                 reject(err);
             } else {

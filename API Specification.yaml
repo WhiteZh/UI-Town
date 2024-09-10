@@ -108,6 +108,13 @@ paths:
                   description: the CSS portion
                 category:
                   $ref: '#/components/schemas/CSSCategory'
+              required:
+                - userID
+                - password_hashed
+                - name
+                - html
+                - css
+                - category
       responses:
         '200':
           description: OK
@@ -225,6 +232,41 @@ paths:
                     type: string
                   password_hashed:
                     type: string
+        '400':
+          $ref: '#/components/responses/400'
+    patch:
+      summary: Update User Information
+      description: |
+        update user information
+        password_hashed is required
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: number
+                password_hashed:
+                  type: string
+                name:
+                  type: string
+                email:
+                  type: string
+                new_password_hashed:
+                  type: string
+                description:
+                  type: string
+                icon:
+                  type: string
+                  description: Base64
+              required:
+                - id
+                - password_hashed
+      responses:
+        '200':
+          description: OK
         '400':
           $ref: '#/components/responses/400'
   /api/users/login:
