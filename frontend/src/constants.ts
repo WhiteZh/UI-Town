@@ -48,6 +48,20 @@ export const shadowContent = (html: string, css: string) => `
 </div>
 `;
 
+export function isOfType(o: unknown, properties: Record<string, (x: unknown) => boolean>): boolean {
+    if (!(typeof o === "object" && o !== null)) {
+        return false;
+    }
+
+    for (let key of Object.keys(properties)) {
+        if (!(key in o && properties[key]((o as Record<string, unknown>)[key]))) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 export type User = {
     id: number,
     name: string,
@@ -70,8 +84,8 @@ export const cssCategories = [
     "transition",
     "special effect",
 ] as const;
-
 export type CSSCategory = typeof cssCategories[number];
+export const isCSSCategory = (o: unknown): o is CSSCategory => typeof o === "string" && (cssCategories as any as string[]).includes(o)
 
 export type CSSStyle = {
     id: number,

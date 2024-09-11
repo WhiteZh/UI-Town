@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import NavigationBar from "@/components/NavigationBar.vue"
 import CodeDisplay from "@/components/code/CodeDisplay.vue";
-import {User, Notification, CSSStyle, cssCategories} from "@/constants";
 import {computed, ComputedRef, inject, onMounted, Ref, ref, watch} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import {createCSSStyle, deleteCSSStyle, getCSSByIds} from "@/api";
 import {user, notifications} from "@/globs";
+import {cssCategories} from "@/constants";
 
 const route = useRoute();
 const router = useRouter();

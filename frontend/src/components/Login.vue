@@ -24,9 +24,14 @@ const login = async () => {
     emits('login', false);
   }
   if (userId) {
-    user.value = await getUserById(userId, password_hashed);
-    notifications.push({message: 'Successfully logged in'});
-    emits('login', true);
+    let res = await getUserById(userId, password_hashed);
+    if (res instanceof Error) {
+      notifications.push({message: res.message});
+    } else {
+      user.value = res;
+      notifications.push({message: 'Successfully logged in'});
+      emits('login', true);
+    }
   } else {
     notifications.push({
       message: "Username or password incorrect",

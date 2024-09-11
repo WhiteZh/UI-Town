@@ -89,8 +89,11 @@ export const cssCategories = [
     "special effect",
 ] as const;
 export type CSSCategory = typeof cssCategories[number];
-export async function createCSS(userID: number, password_hashed: string, name: string, html: string, css: string, category: CSSCategory): Promise<number> {
+export async function createCSS(userID: number, password_hashed: string, name: string, html: string, css: string, category: CSSCategory): Promise<number | Error> {
     let user = await getUserByID(userID);
+    if (user instanceof Error) {
+        return user;
+    }
     if (user.password_hashed !== password_hashed) {
         throw Error("Incorrect password");
     }
@@ -108,12 +111,15 @@ export async function createCSS(userID: number, password_hashed: string, name: s
 }
 
 
-export async function deleteCSS(id: number, password_hashed: string): Promise<void> {
+export async function deleteCSS(id: number, password_hashed: string): Promise<void| Error> {
     let [style] = await getCSSs([id]);
     if (style === undefined) {
         throw Error('ID does not exist');
     }
     let user = await getUserByID(style.author_id);
+    if (user instanceof Error) {
+        return user;
+    }
 
     if (user.password_hashed !== password_hashed) {
         throw Error("Incorrect password!");
