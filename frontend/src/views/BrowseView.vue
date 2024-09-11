@@ -4,23 +4,23 @@ import NavigationBar from "@/components/NavigationBar.vue";
 import DropDown from "@/components/browse/DropDown.vue";
 import DisplayMenu from "@/components/DisplayMenu.vue";
 import {useRoute, useRouter} from "vue-router";
-import {cssCategories, CSSCategory} from "@/constants";
+import {CSSCategory, isCSSCategory} from "@/constants";
 import {notifications} from "@/globs";
 
 let route = useRoute();
 let router = useRouter();
 
 let contentType: 'css' | 'js' | undefined = undefined;
-if (typeof route.params['content_type'] == 'string' && ['css', 'js'].includes(route.params['content_type'])) {
-  contentType = route.params['content_type'] as ('css' | 'js');
+if (route.params['content_type'] === 'css' || route.params['content_type'] === 'js') {
+  contentType = route.params['content_type'];
 } else if (route.params['content_type'] !== '' && route.params['content_type'] !== undefined) {
-  notifications.push({message: 'Illegal Path', color: 'red'});
+  notifications.push({message: 'Path does not exist', color: 'red'});
   console.log(route.params['content_type']);
   router.push({name: 'browse'});
 }
 let category: CSSCategory | undefined = undefined;
-if (typeof route.params['category'] == 'string' && (cssCategories as unknown as string[]).includes(route.params['category'])) {
-  category = route.params['category'] as CSSCategory;
+if (isCSSCategory(route.params['category'])) {
+  category = route.params['category'];
 } else if (route.params['category'] !== '' && route.params['category'] !== undefined) {
   notifications.push({message: 'Illegal Path', color: 'red'});
   console.log(route.params['category']);

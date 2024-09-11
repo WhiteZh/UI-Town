@@ -2,7 +2,7 @@ import express from 'express';
 import {Response} from "express";
 import {getCSSs, createCSS, deleteCSS, getValidIDs, CSSCategory, cssCategories} from '../controllers/css';
 import {CSS} from "../controllers/css";
-import {ErrRes, newErrRes} from "./util";
+import {ErrRes} from "../util";
 
 const router = express.Router();
 
@@ -10,18 +10,18 @@ const router = express.Router();
 router.get('/', async (req, res: Response<CSS[] | ErrRes>) => {
     try {
         if (req.query.id === undefined) {
-            res.status(400).json({error: "provide at least 1 id"});
+            res.status(400).json(ErrRes("provide at least 1 id"));
             return;
         }
         const ids = Array.isArray(req.query.id) ? req.query.id.map(x => parseInt(x.toString())) : [parseInt(req.query.id.toString())];
         if (ids.includes(NaN)) {
-            res.status(400).json({error: "ids should be numbers"});
+            res.status(400).json(ErrRes("ids should be numbers"));
             return;
         }
 
         res.json(await getCSSs(ids));
     } catch (e) {
-        res.status(400).json({error: newErrRes(e)});
+        res.status(400).json(ErrRes(e));
     }
 });
 
@@ -36,7 +36,7 @@ router.post('/', async (req, res: Response<number | ErrRes>) => {
         typeof req.body.category !== 'string' ||
         !cssCategories.includes(req.body.category)
     ) {
-        res.status(400).json({error: 'Bad request'});
+        res.status(400).json(ErrRes('Bad request'));
         return;
     }
 
@@ -52,7 +52,7 @@ router.post('/', async (req, res: Response<number | ErrRes>) => {
     try {
         res.json(await createCSS(body.userID, body.password_hashed, body.name, body.html, body.css, body.category));
     } catch (e) {
-        res.status(400).json({error: newErrRes(e)});
+        res.status(400).json(ErrRes(e));
     }
 });
 
@@ -61,7 +61,7 @@ router.delete('/', async (req, res: Response<void | ErrRes>) => {
     let password_hashed = req.query.password_hashed;
 
     if (id === undefined || password_hashed === undefined || Array.isArray(id) || Array.isArray(password_hashed) || isNaN(parseInt(id.toString()))) {
-        res.status(400).json({error: "Bad request"});
+        res.status(400).json(ErrRes("Bad request"));
         return;
     }
 
@@ -71,7 +71,7 @@ router.delete('/', async (req, res: Response<void | ErrRes>) => {
         await deleteCSS(ID, password_hashed.toString());
         res.send();
     } catch (e) {
-        res.status(400).json({error: newErrRes(e)});
+        res.status(400).json(ErrRes(e));
     }
 });
 
@@ -81,7 +81,7 @@ router.get('/valid', async (req, res: Response<number[] | ErrRes>) => {
         (req.query.offset !== undefined && Array.isArray(req.query.offset)) ||
         (req.query.author_id !== undefined && Array.isArray(req.query.author_id))
     ) {
-        res.status(400).json({error: "Bad request"});
+        res.status(400).json(ErrRes("Bad request"));
         return;
     }
 
@@ -100,7 +100,7 @@ router.get('/valid', async (req, res: Response<number[] | ErrRes>) => {
     try {
         res.json(await getValidIDs(options));
     } catch (e) {
-        res.status(400).json({ error: newErrRes(e) });
+        res.status(400).json(ErrRes(e));
     }
 });
 
