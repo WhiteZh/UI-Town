@@ -19,7 +19,7 @@ export function createUser(name: string, email: string, password_hashed: string)
     });
 }
 
-type getUserRet = {
+type UserRes = {
     id: number,
     name: string,
     email: string,
@@ -28,7 +28,7 @@ type getUserRet = {
     icon: string | null,
 };
 
-type getUserRow = {
+type UserRow = {
     id: number,
     name: string,
     email: string,
@@ -37,7 +37,11 @@ type getUserRow = {
     icon: Buffer | null,
 };
 
-const isGetUserRowType = (o: unknown): o is getUserRow => isOfType(o, {
+const pickUserRes: (_: UserRes) => UserRes =
+    ({id, name, email, password_hashed, description, icon}) =>
+    ({id, name, email, password_hashed, description, icon});
+
+const isUserRowType = (o: unknown): o is UserRow => isOfType(o, {
     id: x => typeof x === 'number',
     name: x => typeof x === 'string',
     email: x => typeof x === 'string',
@@ -46,17 +50,17 @@ const isGetUserRowType = (o: unknown): o is getUserRow => isOfType(o, {
     icon: x => typeof x === 'string' || x === null,
 });
 
-export function getUserByID(id: number): Promise<getUserRet | Error> {
+export function getUserByID(id: number): Promise<UserRes | Error> {
     return new Promise((resolve) => {
         db.get(`SELECT id, name, email, password_hashed, description, icon FROM users WHERE id = ?`, [id], (err, row) => {
             if (err !== null) {
                 resolve(err);
             } else {
-                if (isGetUserRowType(row)) {
-                    resolve({
+                if (isUserRowType(row)) {
+                    resolve(pickUserRes({
                         ...row,
                         icon: row.icon === null ? null : row.icon.toString("base64")
-                    });
+                    }));
                 } else {
                     resolve(Error("SQL returned row does not match the desired type"));
                 }
@@ -65,17 +69,17 @@ export function getUserByID(id: number): Promise<getUserRet | Error> {
     })
 }
 
-export function getUserByEmail(email: string): Promise<getUserRet | Error> {
+export function getUserByEmail(email: string): Promise<UserRes | Error> {
     return new Promise((resolve) => {
         db.get(`SELECT (id, name, email, password_hashed, description, icon) FROM users WHERE email = ?`, [email], (err, row) => {
             if (err !== null) {
                 resolve(err);
             } else {
-                if (isGetUserRowType(row)) {
-                    resolve({
+                if (isUserRowType(row)) {
+                    resolve(pickUserRes({
                         ...row,
                         icon: row.icon === null ? null : row.icon.toString("base64")
-                    });
+                    }));
                 } else {
                     resolve(Error("SQL returned row does not match the desired type"));
                 }

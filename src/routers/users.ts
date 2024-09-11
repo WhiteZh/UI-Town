@@ -72,6 +72,12 @@ router.patch('/', async (req, res: Response<void | ErrRes>) => {
     } => isOfType(o, {
         id: x => typeof x === 'number',
         password_hashed: x => typeof x === 'string',
+    }, {
+        name: x => typeof x === 'string',
+        email: x => typeof x === 'string',
+        new_password_hashed: x => typeof x === 'string',
+        description: x => typeof x === 'string',
+        icon: x => typeof x === 'string',
     });
 
     let body = req.body;
