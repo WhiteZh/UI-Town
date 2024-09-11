@@ -1,6 +1,6 @@
 import express from "express";
 import {getUserByEmail, getUserByID, updateUser} from '../controllers/user';
-import {ErrRes} from "../util";
+import {ErrRes, isOfType} from "../util";
 import {Response} from "express";
 
 const router = express.Router();
@@ -61,7 +61,7 @@ router.get('/', async (req, res: Response<{
 });
 
 router.patch('/', async (req, res: Response<void | ErrRes>) => {
-    const isValidBody = (body: any): body is {
+    const isValidBody = (o: unknown): o is {
         id: number,
         password_hashed: string,
         name?: string,
@@ -69,8 +69,10 @@ router.patch('/', async (req, res: Response<void | ErrRes>) => {
         new_password_hashed?: string,
         description?: string,
         icon?: string,
-    } => typeof body === 'object' && body.id !== undefined && typeof body.id === 'number' &&
-        body.password_hashed !== undefined && typeof body.password_hashed === 'string'
+    } => isOfType(o, {
+        id: x => typeof x === 'number',
+        password_hashed: x => typeof x === 'string',
+    });
 
     let body = req.body;
     if (!isValidBody(body)) {
