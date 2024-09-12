@@ -1,5 +1,5 @@
 import db from '../db';
-import {deleteUndefinedFields, isOfType} from "../util";
+import {deleteUndefinedFields, isOfType, SqlRowTypeError} from "../util";
 
 
 export function createUser(name: string, email: string, password_hashed: string): Promise<number | Error> {
@@ -10,6 +10,7 @@ export function createUser(name: string, email: string, password_hashed: string)
         }
         db.run(`INSERT INTO users (name, email, password_hashed) VALUES (?, ?, ?)`, [name, email, password_hashed], function (err) {
             if (err !== null) {
+                console.error(err);
                 resolve(err);
                 return;
             } else {
@@ -50,41 +51,33 @@ const isUserRowType = (o: unknown): o is UserRow => isOfType(o, {
     icon: x => typeof x === 'string' || x === null,
 });
 
+const retrieveUserSQL = (resolve: (_: UserRes | Error) => void) => (err: Error | null, row: unknown) => {
+    if (err !== null) {
+        console.error(err);
+        resolve(err);
+    } else {
+        if (isUserRowType(row)) {
+            resolve(pickUserRes({
+                ...row,
+                icon: row.icon === null ? null : row.icon.toString("base64")
+            }));
+        } else {
+            let err = SqlRowTypeError();
+            console.error(err);
+            resolve(err);
+        }
+    }
+}
+
 export function getUserByID(id: number): Promise<UserRes | Error> {
     return new Promise((resolve) => {
-        db.get(`SELECT id, name, email, password_hashed, description, icon FROM users WHERE id = ?`, [id], (err, row) => {
-            if (err !== null) {
-                resolve(err);
-            } else {
-                if (isUserRowType(row)) {
-                    resolve(pickUserRes({
-                        ...row,
-                        icon: row.icon === null ? null : row.icon.toString("base64")
-                    }));
-                } else {
-                    resolve(Error("SQL returned row does not match the desired type"));
-                }
-            }
-        });
+        db.get(`SELECT id, name, email, password_hashed, description, icon FROM users WHERE id = ?`, [id], retrieveUserSQL(resolve));
     })
 }
 
 export function getUserByEmail(email: string): Promise<UserRes | Error> {
     return new Promise((resolve) => {
-        db.get(`SELECT (id, name, email, password_hashed, description, icon) FROM users WHERE email = ?`, [email], (err, row) => {
-            if (err !== null) {
-                resolve(err);
-            } else {
-                if (isUserRowType(row)) {
-                    resolve(pickUserRes({
-                        ...row,
-                        icon: row.icon === null ? null : row.icon.toString("base64")
-                    }));
-                } else {
-                    resolve(Error("SQL returned row does not match the desired type"));
-                }
-            }
-        });
+        db.get(`SELECT id, name, email, password_hashed, description, icon FROM users WHERE email = ?`, [email], retrieveUserSQL(resolve));
     });
 }
 
@@ -101,6 +94,7 @@ export function updateUser(id: number, properties: {
     return new Promise((resolve) => {
         db.run(`UPDATE users SET ${emplace} WHERE id = ?`, [...Object.values(properties), id], (err) => {
             if (err !== null) {
+                console.error(err);
                 resolve(err);
             } else {
                 resolve();

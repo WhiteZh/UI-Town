@@ -6,6 +6,8 @@ export function ErrRes(e: Error | string | unknown): ErrRes {
     return {error: e instanceof Error ? e.message : typeof e === 'string' ? e : "Something went wrong"};
 }
 
+export const SqlRowTypeError = () => Error("SQL row(s) does not have the desired shape");
+
 export function deleteUndefinedFields(o: object) {
     for (let _key in o) {
         let key = _key as keyof typeof o;
