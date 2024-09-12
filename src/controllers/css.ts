@@ -1,6 +1,7 @@
 import db from '../db';
 import {getUserByID} from './user';
 import {RunResult} from "sqlite3";
+import {isOfType} from "../util";
 
 export type CSS = {
     id: number,
@@ -12,27 +13,51 @@ export type CSS = {
     category: CSSCategory,
 }
 
+const isCSS = (o: unknown): o is CSS => isOfType(o, {
+    id: x => typeof x === 'number',
+    name: x => typeof x === 'string',
+    viewed_time: x => typeof x === 'number',
+    author_id: x => typeof x === 'number',
+    html: x => typeof x === 'string',
+    css: x => typeof x === 'string',
+    category: x => (cssCategories as unknown as unknown[]).includes(x),
+});
 
-export function getCSSs(ids: number[]): Promise<CSS[]> {
-    return new Promise((resolve, reject) => {
-        db.all(`SELECT * FROM css WHERE id IN (${ids.map(() => '?').join(',')})`, ids, (err: Error|null, objects: CSS[]) => {
+const pickCSS = ({id, name, viewed_time, author_id, html, css, category}: CSS): CSS => ({id, name, viewed_time, author_id, html, css, category});
+
+
+export function getCSSs(ids: number[]): Promise<CSS[] | Error> {
+    return new Promise((resolve) => {
+        db.all(`SELECT * FROM css WHERE id IN (${ids.map(() => '?').join(',')})`, ids, (err, rows) => {
             if (err !== null) {
-                reject(err);
+                resolve(err);
             } else {
-                resolve(objects);
+                if (rows.length === 0) {
+                    resolve([]);
+                } else {
+                    if (isCSS(rows[0])) {
+                        resolve((rows as CSS[]).map(x => pickCSS(x)));
+                    } else {
+                        resolve(Error("Unexpected row schema"));
+                    }
+                }
             }
         });
     });
 }
 
 
-export function getValidIDs(options: {
+const isIDRow = (o: unknown): o is {id: number} => isOfType(o, {
+    id: x => typeof x === 'number',
+});
+
+export async function getValidIDs(options: {
     category?: string,
     author_id?: number,
     limit?: number,
     offset?: number,
     order?: string[],
-}): Promise<number[]> {
+}): Promise<number[] | Error> {
     let where = '';
     let order = '';
     let limit = '';
@@ -53,7 +78,7 @@ export function getValidIDs(options: {
     if (options.order !== undefined) {
         for (let each of options.order) {
             if (each.match(/^[a-zA-Z_]+$/) === null) {
-                throw Error('Illegal column name contained inside options.order');
+                return Error('Illegal column name contained inside options.order');
             }
         }
         order = `ORDER BY ${options.order.join(',')} `;
@@ -66,12 +91,20 @@ export function getValidIDs(options: {
             params.push(options.offset);
         }
     }
-    return new Promise((resolve, reject) => {
-        db.all(`SELECT id FROM css ${where} ${order} ${limit}`, params, (err: Error|null, objects: CSS[]) => {
+    return new Promise((resolve) => {
+        db.all(`SELECT id FROM css ${where} ${order} ${limit}`, params, (err, rows) => {
             if (err !== null) {
-                reject(err);
+                resolve(err);
             } else {
-                resolve(objects.map(e => e.id));
+                if (rows.length === 0) {
+                    resolve([]);
+                } else {
+                    if (isIDRow(rows[0])) {
+                        resolve((rows as {id: number}[]).map(x => x.id));
+                    } else {
+                        resolve(Error("Unexpected row scheme returned"));
+                    }
+                }
             }
         });
     });
@@ -95,14 +128,14 @@ export async function createCSS(userID: number, password_hashed: string, name: s
         return user;
     }
     if (user.password_hashed !== password_hashed) {
-        throw Error("Incorrect password");
+        return Error("Incorrect password");
     }
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         db.run(`INSERT INTO css (name, author_id, html, css, category) VALUES (?, ?, ?, ?, ?)`, [name, userID, html, css, category],
-            function (this:RunResult, err: Error|null) {
+            function (err) {
                 if (err !== null) {
-                    reject(err);
+                    resolve(err);
                 } else {
                     resolve(this.lastID);
                 }
@@ -112,9 +145,13 @@ export async function createCSS(userID: number, password_hashed: string, name: s
 
 
 export async function deleteCSS(id: number, password_hashed: string): Promise<void| Error> {
-    let [style] = await getCSSs([id]);
+    let styles = await getCSSs([id]);
+    if (styles instanceof Error) {
+        return styles
+    }
+    let style = styles[0];
     if (style === undefined) {
-        throw Error('ID does not exist');
+        return Error('ID does not exist');
     }
     let user = await getUserByID(style.author_id);
     if (user instanceof Error) {
@@ -122,13 +159,13 @@ export async function deleteCSS(id: number, password_hashed: string): Promise<vo
     }
 
     if (user.password_hashed !== password_hashed) {
-        throw Error("Incorrect password!");
+        return Error("Incorrect password!");
     }
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         db.run(`DELETE FROM css WHERE id=${id}`, [], (err) => {
             if (err !== null) {
-                reject(err);
+                resolve(err);
             } else {
                 resolve();
             }

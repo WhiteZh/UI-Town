@@ -2,20 +2,20 @@ import db from '../db';
 import {deleteUndefinedFields, isOfType} from "../util";
 
 
-export function createUser(name: string, email: string, password_hashed: string): Promise<number> {
-    if (email.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/) === null) {
-        throw Error('Wrong email format');
-    }
-    return new Promise((resolve, reject) => {
-        db.run(`INSERT INTO users (name, email, password_hashed) VALUES (?, ?, ?)`,
-            [name, email, password_hashed],
-            function (err) {
-                if (err !== null) {
-                    reject(err);
-                } else {
-                    resolve(this.lastID);
-                }
-            });
+export function createUser(name: string, email: string, password_hashed: string): Promise<number | Error> {
+    return new Promise((resolve) => {
+        if (email.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/) === null) {
+            resolve(Error('Wrong email format'));
+            return;
+        }
+        db.run(`INSERT INTO users (name, email, password_hashed) VALUES (?, ?, ?)`, [name, email, password_hashed], function (err) {
+            if (err !== null) {
+                resolve(err);
+                return;
+            } else {
+                resolve(this.lastID);
+            }
+        });
     });
 }
 

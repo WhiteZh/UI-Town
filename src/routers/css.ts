@@ -19,7 +19,12 @@ router.get('/', async (req, res: Response<CSS[] | ErrRes>) => {
             return;
         }
 
-        res.json(await getCSSs(ids));
+        let csss = await getCSSs(ids);
+        if (csss instanceof Error) {
+            res.status(400).json(ErrRes(csss.message));
+        } else {
+            res.json(csss);
+        }
     } catch (e) {
         res.status(400).json(ErrRes(e));
     }
@@ -105,7 +110,12 @@ router.get('/valid', async (req, res: Response<number[] | ErrRes>) => {
     };
 
     try {
-        res.json(await getValidIDs(options));
+        let ids = await getValidIDs(options);
+        if (ids instanceof Error) {
+            res.status(400).json(ErrRes(ids.message));
+        } else {
+            res.json(ids);
+        }
     } catch (e) {
         res.status(400).json(ErrRes(e));
     }
