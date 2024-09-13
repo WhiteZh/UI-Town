@@ -48,7 +48,7 @@ export const shadowContent = (html: string, css: string) => `
 </div>
 `;
 
-export function isOfType(o: unknown, properties: Record<string, (x: unknown) => boolean>): boolean {
+export function isOfType(o: unknown, properties: Record<string, (x: unknown) => boolean>, optional?: Record<string, (x: unknown) => boolean>): boolean {
     if (!(typeof o === "object" && o !== null)) {
         return false;
     }
@@ -56,6 +56,14 @@ export function isOfType(o: unknown, properties: Record<string, (x: unknown) => 
     for (let key of Object.keys(properties)) {
         if (!(key in o && properties[key]((o as Record<string, unknown>)[key]))) {
             return false;
+        }
+    }
+
+    if (optional !== undefined) {
+        for (let key of Object.keys(optional)) {
+            if (key in o && !optional[key]((o as Record<string, unknown>)[key])) {
+                return false;
+            }
         }
     }
 
@@ -67,6 +75,8 @@ export type User = {
     name: string,
     email: string,
     password_hashed: string,
+    description: string,
+    icon: string | null,
 };
 
 export type Notification = {

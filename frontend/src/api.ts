@@ -68,7 +68,12 @@ export async function getUserById(id: number, password_hashed: string): Promise<
         return Error((await res.json() as {error: string}).error);
     } else {
         const validRes = (o: unknown): o is User => isOfType(o, {
-
+            id: x => typeof x === 'number',
+            name: x => typeof x === 'string',
+            email: x => typeof x === 'string',
+            password_hashed: x => typeof x === 'string',
+            description: x => typeof x === 'string',
+            icon: x => typeof x === 'string' || x === null,
         });
 
         let o: unknown = await res.json();

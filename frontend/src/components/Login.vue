@@ -51,7 +51,7 @@ onMounted(() => {
     <div class="font-['Zhi_Mang_Xing'] text-5xl text-white py-4 self-center mb-5">UITOWN</div>
     <div class="flex flex-col">
       <div class="flex flex-row mb-3 justify-center">
-        <input placeholder="username/email" class="h-11 w-80 rounded-full my-1.5 ms-1.5 outline-0 ps-0.5 font-mono text-xs text-center" ref="emailInput" @keydown.enter="passwordInput.focus">
+        <input placeholder="username/email" class="h-11 w-80 rounded-full my-1.5 ms-1.5 outline-0 ps-0.5 font-mono text-xs text-center" ref="emailInput" @keydown.enter="() => passwordInput.focus()">
       </div>
       <div class="flex flex-row mb-3 justify-center">
         <input placeholder="password" type="password" class="h-11 w-80 rounded-full my-1.5 ms-1.5 outline-0 ps-0.5 font-mono text-xs text-center" ref="passwordInput" @keydown.enter="login">
