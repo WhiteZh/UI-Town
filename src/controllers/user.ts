@@ -36,6 +36,7 @@ type UserRow = {
     password_hashed: string,
     description: string,
     icon: Buffer | null,
+    icon_type: string | null,
 };
 
 const pickUserRes: (_: UserRes) => UserRes =
@@ -48,7 +49,8 @@ const isUserRowType = (o: unknown): o is UserRow => isOfType(o, {
     email: x => typeof x === 'string',
     password_hashed: x => typeof x === 'string',
     description: x => typeof x === 'string',
-    icon: x => typeof x === 'string' || x === null,
+    icon: x => x instanceof Buffer || x === null,
+    icon_type: x => typeof x === 'string' || x === null,
 });
 
 const retrieveUserSQL = (resolve: (_: UserRes | Error) => void) => (err: Error | null, row: unknown) => {
@@ -59,11 +61,12 @@ const retrieveUserSQL = (resolve: (_: UserRes | Error) => void) => (err: Error |
         if (isUserRowType(row)) {
             resolve(pickUserRes({
                 ...row,
-                icon: row.icon === null ? null : row.icon.toString("base64")
+                icon: row.icon === null || row.icon_type === null ? null : `data:image/${row.icon_type};base64,${row.icon.toString("base64")}`
             }));
         } else {
             let err = SqlRowTypeError();
             console.error(err);
+            console.error(row);
             resolve(err);
         }
     }
@@ -71,13 +74,13 @@ const retrieveUserSQL = (resolve: (_: UserRes | Error) => void) => (err: Error |
 
 export function getUserByID(id: number): Promise<UserRes | Error> {
     return new Promise((resolve) => {
-        db.get(`SELECT id, name, email, password_hashed, description, icon FROM users WHERE id = ?`, [id], retrieveUserSQL(resolve));
+        db.get(`SELECT id, name, email, password_hashed, description, icon, icon_type FROM users WHERE id = ?`, [id], retrieveUserSQL(resolve));
     })
 }
 
 export function getUserByEmail(email: string): Promise<UserRes | Error> {
     return new Promise((resolve) => {
-        db.get(`SELECT id, name, email, password_hashed, description, icon FROM users WHERE email = ?`, [email], retrieveUserSQL(resolve));
+        db.get(`SELECT id, name, email, password_hashed, description, icon, icon_type FROM users WHERE email = ?`, [email], retrieveUserSQL(resolve));
     });
 }
 
@@ -88,8 +91,16 @@ export function updateUser(id: number, properties: {
     password_hashed?: string,
     description?: string,
     icon?: Buffer,
+    icon_type?: string,
 }): Promise<void | Error> {
+
+    if (properties.icon === undefined || properties.icon_type === undefined) {
+        properties.icon = undefined;
+        properties.icon_type = undefined;
+    }
+
     deleteUndefinedFields(properties);
+
     let emplace = Object.keys(properties).map(v => `${v} = ?`).join(',');
     return new Promise((resolve) => {
         db.run(`UPDATE users SET ${emplace} WHERE id = ?`, [...Object.values(properties), id], (err) => {

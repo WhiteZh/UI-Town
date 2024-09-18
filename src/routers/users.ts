@@ -69,6 +69,7 @@ router.patch('/', async (req, res: Response<void | ErrRes>) => {
         new_password_hashed?: string,
         description?: string,
         icon?: string,
+        icon_type?: string,
     } => isOfType(o, {
         id: x => typeof x === 'number',
         password_hashed: x => typeof x === 'string',
@@ -78,6 +79,7 @@ router.patch('/', async (req, res: Response<void | ErrRes>) => {
         new_password_hashed: x => typeof x === 'string',
         description: x => typeof x === 'string',
         icon: x => typeof x === 'string',
+        icon_type: x => typeof x === 'string',
     });
 
     let body = req.body;
@@ -103,7 +105,8 @@ router.patch('/', async (req, res: Response<void | ErrRes>) => {
         email: body.email,
         password_hashed: body.new_password_hashed,
         description: body.description,
-        icon: body.icon? Buffer.from(body.icon, 'base64') : undefined,
+        icon: body.icon !== undefined ? Buffer.from(body.icon, 'base64') : undefined,
+        icon_type: body.icon_type,
     });
     if (err instanceof Error) {
         res.status(400).json(ErrRes(err.message));

@@ -261,6 +261,9 @@ paths:
                 icon:
                   type: string
                   description: Base64
+                icon_type:
+                  type: string
+                  description: type of image
               required:
                 - id
                 - password_hashed
