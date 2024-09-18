@@ -13,6 +13,9 @@
 //
 // ];
 
+import {notifications, user} from "@/globs";
+import {getUserById} from "@/api";
+
 export const iframeContent = (html: string, css: string) => `
   <!DOCTYPE html>
   <html lang="en">
@@ -48,10 +51,35 @@ export const shadowContent = (html: string, css: string) => `
 </div>
 `;
 
+export function isOfType(o: unknown, properties: Record<string, (x: unknown) => boolean>, optional?: Record<string, (x: unknown) => boolean>): boolean {
+    if (!(typeof o === "object" && o !== null)) {
+        return false;
+    }
+
+    for (let key of Object.keys(properties)) {
+        if (!(key in o && properties[key]((o as Record<string, unknown>)[key]))) {
+            return false;
+        }
+    }
+
+    if (optional !== undefined) {
+        for (let key of Object.keys(optional)) {
+            if (key in o && !optional[key]((o as Record<string, unknown>)[key])) {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
 export type User = {
     id: number,
+    name: string,
     email: string,
     password_hashed: string,
+    description: string,
+    icon: string | null,
 };
 
 export type Notification = {
@@ -69,8 +97,8 @@ export const cssCategories = [
     "transition",
     "special effect",
 ] as const;
-
 export type CSSCategory = typeof cssCategories[number];
+export const isCSSCategory = (o: unknown): o is CSSCategory => typeof o === "string" && (cssCategories as any as string[]).includes(o)
 
 export type CSSStyle = {
     id: number,
@@ -81,3 +109,14 @@ export type CSSStyle = {
     css: string,
     category: CSSCategory
 };
+
+export async function updateUser() {
+    if (user.value === undefined) return;
+
+    let res = await getUserById(user.value.id, user.value.password_hashed);
+    if (res instanceof Error) {
+        notifications.push({message: res.message});
+    } else {
+        user.value = res;
+    }
+}

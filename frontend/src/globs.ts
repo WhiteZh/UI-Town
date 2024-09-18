@@ -13,6 +13,6 @@ const globs: {
 
 export const notifications: Notification[] = reactive<Notification[]>([]);
 
-export const user = ref<User>();
+export const user: Ref<User | undefined> = ref<User>();
 
-export const playedOA = ref<boolean>(false);
+export const playedOA: Ref<boolean> = ref<boolean>(false);

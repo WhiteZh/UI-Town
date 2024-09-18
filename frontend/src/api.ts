@@ -1,4 +1,4 @@
-import {CSSCategory, CSSStyle, User} from "@/constants";
+import {CSSCategory, CSSStyle, isOfType, User} from "@/constants";
 
 export async function getValidCSSIds(options?: {
     category?: CSSCategory,
@@ -54,6 +54,31 @@ export async function getCSSByIds(ids: number[]): Promise<CSSStyle[]> {
         throw Error((await res.json() as {error: string}).error);
     }
     return await res.json() as CSSStyle[];
+}
+
+export async function getUserById(id: number, password_hashed: string): Promise<User | Error> {
+    let res = await fetch(`/api/users?id=${id}&password_hashed=${password_hashed}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    });
+
+    if (!res.ok) {
+        return Error((await res.json() as {error: string}).error);
+    } else {
+        const validRes = (o: unknown): o is User => isOfType(o, {
+            id: x => typeof x === 'number',
+            name: x => typeof x === 'string',
+            email: x => typeof x === 'string',
+            password_hashed: x => typeof x === 'string',
+            description: x => typeof x === 'string',
+            icon: x => typeof x === 'string' || x === null,
+        });
+
+        let o: unknown = await res.json();
+        return validRes(o) ? o : Error("Unexpected response from server");
+    }
 }
 
 export async function getUserIdByLoginInfo(email: string, password_hashed: string): Promise<number|undefined> {

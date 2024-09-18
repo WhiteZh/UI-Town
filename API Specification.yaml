@@ -108,6 +108,13 @@ paths:
                   description: the CSS portion
                 category:
                   $ref: '#/components/schemas/CSSCategory'
+              required:
+                - userID
+                - password_hashed
+                - name
+                - html
+                - css
+                - category
       responses:
         '200':
           description: OK
@@ -190,6 +197,79 @@ paths:
                 items:
                   type: integer
                   description: IDs
+        '400':
+          $ref: '#/components/responses/400'
+  /api/users:
+    get:
+      summary: Fetch User Information
+      description: |
+        fetch user information based on id
+        password_hashed is required
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: password_hashed
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  email:
+                    type: string
+                  password_hashed:
+                    type: string
+        '400':
+          $ref: '#/components/responses/400'
+    patch:
+      summary: Update User Information
+      description: |
+        update user information
+        password_hashed is required
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: number
+                password_hashed:
+                  type: string
+                name:
+                  type: string
+                email:
+                  type: string
+                new_password_hashed:
+                  type: string
+                description:
+                  type: string
+                icon:
+                  type: string
+                  description: Base64
+                icon_type:
+                  type: string
+                  description: type of image
+              required:
+                - id
+                - password_hashed
+      responses:
+        '200':
+          description: OK
         '400':
           $ref: '#/components/responses/400'
   /api/users/login:

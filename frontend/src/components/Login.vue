@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {ref, inject, onMounted, Ref} from "vue";
 import {sha256} from "js-sha256";
-import {getUserIdByLoginInfo} from "@/api";
+import {getUserById, getUserIdByLoginInfo} from "@/api";
 import {notifications, user} from "@/globs";
 
 const emailInput = ref() as Ref<HTMLInputElement>;
@@ -24,13 +24,14 @@ const login = async () => {
     emits('login', false);
   }
   if (userId) {
-    user.value = {
-      id: userId,
-      email: email,
-      password_hashed: password_hashed,
-    };
-    notifications.push({message: 'Successfully logged in'});
-    emits('login', true);
+    let res = await getUserById(userId, password_hashed);
+    if (res instanceof Error) {
+      notifications.push({message: res.message});
+    } else {
+      user.value = res;
+      notifications.push({message: 'Successfully logged in'});
+      emits('login', true);
+    }
   } else {
     notifications.push({
       message: "Username or password incorrect",
@@ -50,7 +51,7 @@ onMounted(() => {
     <div class="font-['Zhi_Mang_Xing'] text-5xl text-white py-4 self-center mb-5">UITOWN</div>
     <div class="flex flex-col">
       <div class="flex flex-row mb-3 justify-center">
-        <input placeholder="username/email" class="h-11 w-80 rounded-full my-1.5 ms-1.5 outline-0 ps-0.5 font-mono text-xs text-center" ref="emailInput" @keydown.enter="passwordInput.focus">
+        <input placeholder="username/email" class="h-11 w-80 rounded-full my-1.5 ms-1.5 outline-0 ps-0.5 font-mono text-xs text-center" ref="emailInput" @keydown.enter="() => passwordInput.focus()">
       </div>
       <div class="flex flex-row mb-3 justify-center">
         <input placeholder="password" type="password" class="h-11 w-80 rounded-full my-1.5 ms-1.5 outline-0 ps-0.5 font-mono text-xs text-center" ref="passwordInput" @keydown.enter="login">
