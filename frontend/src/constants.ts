@@ -13,6 +13,9 @@
 //
 // ];
 
+import {notifications, user} from "@/globs";
+import {getUserById} from "@/api";
+
 export const iframeContent = (html: string, css: string) => `
   <!DOCTYPE html>
   <html lang="en">
@@ -106,3 +109,14 @@ export type CSSStyle = {
     css: string,
     category: CSSCategory
 };
+
+export async function updateUser() {
+    if (user.value === undefined) return;
+
+    let res = await getUserById(user.value.id, user.value.password_hashed);
+    if (res instanceof Error) {
+        notifications.push({message: res.message});
+    } else {
+        user.value = res;
+    }
+}
